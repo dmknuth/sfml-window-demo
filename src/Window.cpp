@@ -1,15 +1,11 @@
 #include "Window.hpp"
-#include <SFML/Graphics.hpp>
+#include "Balls.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Window/WindowBase.hpp>
-#include <SFML/System/Vector2.hpp>
-#include <SFML/Window/VideoMode.hpp>
-#include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Event.hpp>
+#include <iostream>
 
 //----------------------------------------------------------------------------------------
-int
+Window*
 Window::configure
 (
     u_int16_t   x,
@@ -17,29 +13,45 @@ Window::configure
     float       anti_alias
 )
 {
-    size_x = {x};
-    size_y = {y};
+    size_x = x;
+    size_y = y;
     settings.antiAliasingLevel = anti_alias;
-    return 0;
+    return this;
 }
 
 //----------------------------------------------------------------------------------------
-int
+Window*
 Window::create()
 {
     _window = sf::RenderWindow(sf::VideoMode({size_x, size_y}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
-    return 0;
+    return this;
+}
+
+//----------------------------------------------------------------------------------------
+void
+Window::add_content(Balls* c)
+{   
+    content = c;
+    if(content != nullptr)
+        content -> update();
+    else
+        std::cout << "No content" << std::endl;
+}
+
+//----------------------------------------------------------------------------------------
+void
+Window::update_content()
+{
+    if(content != nullptr)
+        content -> update();
+    else
+        exit(-2);
 }
 
 //----------------------------------------------------------------------------------------
 int
 Window::process_events()
 {
-    sf::CircleShape shape;
-    shape.setRadius(40.f);
-    shape.setPosition(sf::Vector2f(100, 100));
-    shape.setFillColor(sf::Color::Cyan);
-
     while (_window.isOpen())
     {
         while (const std::optional event = _window.pollEvent())
@@ -51,10 +63,11 @@ Window::process_events()
                 _window.close();
             }
         }
-
-//        update_shape(shape);
+        
         _window.clear(sf::Color::White);
-        _window.draw(shape);
+        update_content();
+        for(int i = 0; i < content -> get_count(); ++i)
+            _window.draw(content->get_item(i));
         _window.display();
     }
     return 0;
