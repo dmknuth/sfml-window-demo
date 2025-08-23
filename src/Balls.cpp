@@ -64,31 +64,35 @@ Balls::update()
     {
         float direction = ((rand() % 2) == 0) ? -1.0 : 1.0;
         float angle = velocity[i].direction + direction * (float)(rand() % 10) / 100.0;
-        float d = 0.01;
+        float d = velocity[0].speed / 2500.0;
         sf::Vector2f pos = ball[i]->getPosition();
         float x = pos.x + d * cos(angle / (2 * std::numbers::pi));
         float y = pos.y + d * sin(angle / (2 * std::numbers::pi));
         if(x < 0)
         {
             x += d;
-            velocity[i].direction = -velocity[i].direction;
+            velocity[i].direction = 180.0-velocity[i].direction;
+            velocity[i].speed += 0.1;
         }
         else if(x + 2.0 * radius > x_max)
         {
             x -= d;
-            velocity[i].direction = -velocity[i].direction;
+            velocity[i].direction = 180.0-velocity[i].direction;
+            velocity[i].speed += 0.1;
         }
         if(y < 0)
         {
             y += d;
             velocity[i].direction = -velocity[i].direction;
+            velocity[i].speed += 0.1;
         }
         else if(y + 2.0 * radius > y_max)
         {
             y -= d;
             velocity[i].direction = -velocity[i].direction;
+            velocity[i].speed += 0.1;
         }
-//        std::cout << x << ", " << y << std::endl;
+//        std::cout << velocity[0].speed << std::endl;
         ball[i]->setPosition({x, y});
     }
     return 0;
