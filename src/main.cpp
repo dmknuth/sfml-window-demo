@@ -40,17 +40,20 @@ int main(int argc, char* argv[])
     
         Window* window = new Window();
         window -> configure(x, y, anti_alias) -> create();
-        Balls* ball_machine = new Balls(10, 20);
+        Balls* ball_machine = new Balls();
         if(ball_machine == nullptr)
         {
             std::cout << "ball_machine is NULL" << std::endl;
             return -1;
         }
+        ball_machine -> set_size(40);
+        ball_machine -> set_count(20);
+        ball_machine -> set_boundaries(x, y);
+        ball_machine -> generate();
 
         window -> add_content(ball_machine);
         window -> process_events();
         delete window;
-        return -1;
     }
     return 0;
 }
