@@ -13,12 +13,13 @@ process_args
     u_int16_t&  size_y,
     float&      anti_alias,
     u_int16_t&  count,
-    u_int16_t&  radius
+    u_int16_t&  radius,
+    bool&       grid
 )
 {
     for(;;)
     {
-      switch(getopt(argc, argv, "a:c:hr:x:y:"))
+      switch(getopt(argc, argv, "a:c:ghr:x:y:"))
       {
         case 'a':
           anti_alias = std::strtof(optarg, 0);
@@ -28,6 +29,10 @@ process_args
         case 'c':
           count = std::atoi(optarg);
           std::cout << "count " << count << std::endl;
+          continue;
+    
+        case 'g':
+          grid = true;
           continue;
     
         case 'r':
@@ -68,12 +73,13 @@ int main(int argc, char* argv[])
     float       anti_alias = 1.0;
     u_int16_t   count = 1;
     u_int16_t   radius = 20;
-
-    if(process_args(argc, argv, x, y, anti_alias, count, radius) == true)
+    bool        grid = false;
+    
+    if(process_args(argc, argv, x, y, anti_alias, count, radius, grid) == true)
     {
     
         Window* window = new Window();
-        window -> configure(x, y, anti_alias) -> create();
+        window -> configure(x, y, anti_alias, grid) -> create();
         Balls* ball_machine = new Balls();
         if(ball_machine == nullptr)
         {
@@ -84,7 +90,6 @@ int main(int argc, char* argv[])
         ball_machine -> set_count(count);
         ball_machine -> set_boundaries(x, y);
         ball_machine -> generate();
-
         window -> add_content(ball_machine);
         window -> process_events();
         delete window;
