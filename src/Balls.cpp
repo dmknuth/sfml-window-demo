@@ -59,28 +59,36 @@ Balls::get_item(int i)
 int
 Balls::update()
 {
+    const float k360Degrees = 360.0;
+    const float kTwoPi = 2.0 * std::numbers::pi;
+    const float d = 2.0 * radius;
+    
     for(int i = 0; i < count; ++i)
     {
         sf::Vector2f pos = ball[i]->getPosition();
+        
         float s = velocity[i].speed;
         float h = velocity[i].heading;
-        pos.x += (s * std::cosf(h * 2.0 * std::numbers::pi / 360.0));
-        pos.y += (s * std::sinf(h * 2.0 * std::numbers::pi/  360.0));
-        if((pos.x < 0) || ((pos.x + (2.0 * radius)) > x_max))
+        
+        pos.x += (s * std::cosf(h * kTwoPi / k360Degrees));
+        pos.y += (s * std::sinf(h * kTwoPi / k360Degrees));
+        
+        if((pos.x < 0) || ((pos.x + d) > x_max))
         {
-            velocity[i].heading = 180.0 - h;
+            velocity[i].heading = k360Degrees / 2.0 - h;
             if(pos.x < 0)
-                pos.x = s * std::cosf(velocity[i].heading * 2.0 * std::numbers::pi / 360.0);
+                pos.x = s * std::cosf(velocity[i].heading * kTwoPi / k360Degrees);
             else
-                pos.x = x_max - 2.0 * radius - s * std::cosf(velocity[i].heading * 2.0 * std::numbers::pi / 360.0);
+                pos.x = x_max - d - s * std::cosf(velocity[i].heading * kTwoPi / k360Degrees);
         }
-        if((pos.y < 0) || ((pos.y + (2.0 * radius)) > y_max))
+        
+        if((pos.y < 0) || ((pos.y + d) > y_max))
         {
-            velocity[i].heading = 360.0 - h;
+            velocity[i].heading = k360Degrees - h;
             if(pos.y < 0)
-                pos.y = s * std::sinf(velocity[i].heading * 2.0 * std::numbers::pi / 360.0);
+                pos.y = s * std::sinf(velocity[i].heading * kTwoPi / k360Degrees);
             else
-                pos.y = y_max - 2.0 * radius - s * std::sinf(velocity[i].heading * 2.0 * std::numbers::pi / 360.0);
+                pos.y = y_max - d - s * std::sinf(velocity[i].heading * kTwoPi / k360Degrees);
         }
         ball[i]->setPosition(pos);
     }
