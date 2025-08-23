@@ -1,6 +1,7 @@
 #include "Window.hpp"
 #include <cstdlib>
 #include <iostream>
+#include <unistd.h>
 
 //----------------------------------------------------------------------------------------
 bool
@@ -15,21 +16,46 @@ process_args
     u_int16_t&  radius
 )
 {
-    switch (argc)
+    for(;;)
     {
-        case 6:
-            radius = std::atoi(argv[5]);
-        case 5:
-            count = std::atoi(argv[4]);
-        case 4:
-            anti_alias = std::strtof(argv[3], 0);
-        case 3:
-            size_y = std::atoi(argv[2]);
-        case 2:
-            size_x = std::atoi(argv[1]);
-            break;
-        default:
-            break;
+      switch(getopt(argc, argv, "a:c:hr:x:y:"))
+      {
+        case 'a':
+          anti_alias = std::strtof(optarg, 0);
+          std::cout << "anti_alias " << anti_alias << std::endl;
+          continue;
+    
+        case 'c':
+          count = std::atoi(optarg);
+          std::cout << "count " << count << std::endl;
+          continue;
+    
+        case 'r':
+          radius = std::atoi(optarg);
+          std::cout << "radius " << radius << std::endl;
+          continue;
+    
+        case 'x':
+          size_x = std::atoi(optarg);
+          std::cout << "size_x " << size_x << std::endl;
+          continue;
+    
+        case 'y':
+          size_y = std::atoi(optarg);
+          std::cout << "size_y " << size_y << std::endl;
+          continue;
+    
+        case '?':
+        case 'h':
+        default :
+          printf("Help/Usage Example\n");
+          break;
+    
+        case -1:
+          break;
+      }
+    
+      break;
     }
     return true;
 }

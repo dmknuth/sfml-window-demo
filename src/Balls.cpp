@@ -20,8 +20,8 @@ Balls::generate()
         float x = (x_max - 2 * radius) / 2.0;
         float y = (y_max - 2 * radius) / 2.0;
         ball[i] -> setPosition({x, y});
-        float speed = 0.1;
-        float heading = (float)(i * 30.0); //(float)(rand() % 360);
+        float speed = (float)(rand() % 50 + 1) / 100.0;
+        float heading = (float)(rand() % 360);
         velocity.push_back(ball_struct(heading, speed));
     }
 }
@@ -127,6 +127,9 @@ Balls::random_color()
             color = sf::Color::Magenta;
             break;
     }
-    color.a = 128;
+    color.r = rand() % 256;
+    color.g = rand() % 256;
+    color.b = rand() % 256;
+    color.a = rand() % 224 + 32;
     return(color);
 }
