@@ -6,7 +6,7 @@
 
 struct ball_struct
 {
-    float   direction;
+    float   heading;
     float   speed;
 };
 
@@ -29,7 +29,6 @@ class Balls
         std::vector<sf::CircleShape*> ball;
         std::vector<ball_struct> velocity;
         
-        std::uint8_t    distribution_generator();
         sf::Color       random_color();
         sf::RenderWindow    _window;
 

@@ -4,27 +4,26 @@
 #include <random>
 #include <iostream>
 #include <numbers>
+#include <cmath>
 
 //----------------------------------------------------------------------------------------
 void
 Balls::generate()
 {
-    std::cout << "count " << count << " radius " << radius << std::endl;
+    srand(time(0));
     for(int i = 0; i < count; ++i)
     {
         sf::CircleShape* circle = new sf::CircleShape;
         ball.push_back(circle); 
-        ball[i]->setRadius(radius);
-        ball[i]->setFillColor(random_color());
-        float x = distribution_generator();
-        float y = distribution_generator();
-//        std::cout << "ball " << i << " pos(" << x << ", " << y << ")" << std::endl;
-        ball[i]->setPosition({x, y});
-        u_int16_t speed = (float)(rand() % 10);
-        u_int16_t direction = (float)(rand() % 360);
-        velocity.push_back(ball_struct(speed, direction));
+        ball[i] -> setRadius(radius);
+        ball[i] -> setFillColor(random_color());
+        float x = (x_max - 2 * radius) / 2.0;
+        float y = (y_max - 2 * radius) / 2.0;
+        ball[i] -> setPosition({x, y});
+        float speed = 0.1;
+        float heading = (float)(i * 30.0); //(float)(rand() % 360);
+        velocity.push_back(ball_struct(heading, speed));
     }
-
 }
 
 //----------------------------------------------------------------------------------------
@@ -62,52 +61,30 @@ Balls::update()
 {
     for(int i = 0; i < count; ++i)
     {
-        float direction = ((rand() % 2) == 0) ? -1.0 : 1.0;
-        float angle = velocity[i].direction + direction * (float)(rand() % 10) / 100.0;
-        float d = velocity[0].speed / 2500.0;
         sf::Vector2f pos = ball[i]->getPosition();
-        float x = pos.x + d * cos(angle / (2 * std::numbers::pi));
-        float y = pos.y + d * sin(angle / (2 * std::numbers::pi));
-        if(x < 0)
+        float s = velocity[i].speed;
+        float h = velocity[i].heading;
+        pos.x += (s * std::cosf(h * 2.0 * std::numbers::pi / 360.0));
+        pos.y += (s * std::sinf(h * 2.0 * std::numbers::pi/  360.0));
+        if((pos.x < 0) || ((pos.x + (2.0 * radius)) > x_max))
         {
-            x += d;
-            velocity[i].direction = 180.0-velocity[i].direction;
-            velocity[i].speed += 0.1;
+            velocity[i].heading = 180.0 - h;
+            if(pos.x < 0)
+                pos.x = s * std::cosf(velocity[i].heading * 2.0 * std::numbers::pi / 360.0);
+            else
+                pos.x = x_max - 2.0 * radius - s * std::cosf(velocity[i].heading * 2.0 * std::numbers::pi / 360.0);
         }
-        else if(x + 2.0 * radius > x_max)
+        if((pos.y < 0) || ((pos.y + (2.0 * radius)) > y_max))
         {
-            x -= d;
-            velocity[i].direction = 180.0-velocity[i].direction;
-            velocity[i].speed += 0.1;
+            velocity[i].heading = 360.0 - h;
+            if(pos.y < 0)
+                pos.y = s * std::sinf(velocity[i].heading * 2.0 * std::numbers::pi / 360.0);
+            else
+                pos.y = y_max - 2.0 * radius - s * std::sinf(velocity[i].heading * 2.0 * std::numbers::pi / 360.0);
         }
-        if(y < 0)
-        {
-            y += d;
-            velocity[i].direction = -velocity[i].direction;
-            velocity[i].speed += 0.1;
-        }
-        else if(y + 2.0 * radius > y_max)
-        {
-            y -= d;
-            velocity[i].direction = -velocity[i].direction;
-            velocity[i].speed += 0.1;
-        }
-//        std::cout << velocity[0].speed << std::endl;
-        ball[i]->setPosition({x, y});
+        ball[i]->setPosition(pos);
     }
     return 0;
-}
-
-//----------------------------------------------------------------------------------------
-std::uint8_t
-Balls::distribution_generator()
-{
-/*
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0,255);
-    return distribution(generator);
-*/
-    return rand() % 128;
 }
 
 //----------------------------------------------------------------------------------------
