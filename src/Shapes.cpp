@@ -17,6 +17,7 @@ Shapes::generate()
         sf::RectangleShape* circle = new sf::RectangleShape;
 //        circle -> setRadius(radius);
         circle -> setSize({(float)radius, (float)radius});
+        circle -> setOrigin({radius * 0.5f, radius * 0.5f});
         circle -> setFillColor(random_color());
         float x = (x_max - 2 * radius) / 2.0;
         float y = (y_max - 2 * radius) / 2.0;
@@ -65,10 +66,10 @@ Shapes::get_item(int i)
 int
 Shapes::update()
 {
-    const float k360Degrees = 360.0;
-    const float kTwoPi = 2.0 * std::numbers::pi;
-    const float d = 2.0 * radius;
-    
+    const float k360Degrees = 360.0f;
+    const float kTwoPi = 2.0f * std::numbers::pi;
+    const float d = radius / 2.0f;
+
     for(int i = 0; i < count; ++i)
 //    for(auto i : shape)
     {
@@ -79,28 +80,33 @@ Shapes::update()
         
         pos.x += (s * std::cosf(h * kTwoPi / k360Degrees));
         pos.y += (s * std::sinf(h * kTwoPi / k360Degrees));
+//        pos.x = x_max / 2.0f;
+//        pos.y = y_max / 2.0f;
         
-        if((pos.x < 0) || ((pos.x + d) > x_max))
+        if((pos.x < d) || ((pos.x + d) > x_max))
         {
             velocity[i].heading = k360Degrees / 2.0 - h;
-            if(pos.x < 0)
-                pos.x = s * std::cosf(velocity[i].heading * kTwoPi / k360Degrees);
+            if(pos.x < d)
+                pos.x = d + s * std::cosf(velocity[i].heading * kTwoPi / k360Degrees);
             else
                 pos.x = x_max - d - s * std::cosf(velocity[i].heading * kTwoPi / k360Degrees);
         }
         
-        if((pos.y < 0) || ((pos.y + d) > y_max))
+        if((pos.y < d) || ((pos.y + d) > y_max))
         {
             velocity[i].heading = k360Degrees - h;
-            if(pos.y < 0)
-                pos.y = s * std::sinf(velocity[i].heading * kTwoPi / k360Degrees);
+            if(pos.y < d)
+                pos.y = d + s * std::sinf(velocity[i].heading * kTwoPi / k360Degrees);
             else
                 pos.y = y_max - d - s * std::sinf(velocity[i].heading * kTwoPi / k360Degrees);
         }
         shape[i] -> setPosition(pos);
         sf::Angle r = shape[i] -> getRotation();
         using namespace sf::Literals;
-        r += 0.1_deg;
+        if(h > 180.0)
+            r -= 0.1_deg;
+        else
+            r += 0.1_deg;
         shape[i] -> setRotation(r);
     }
     return 0;

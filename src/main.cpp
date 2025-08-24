@@ -33,12 +33,12 @@ process_args
         {
             case 'a':
               anti_alias = std::strtof(optarg, 0);
-              std::cout << "anti_alias " << anti_alias << std::endl;
+//              std::cout << "anti_alias " << anti_alias << std::endl;
               continue;
         
             case 'c':
               count = std::atoi(optarg);
-              std::cout << "count " << count << std::endl;
+//              std::cout << "count " << count << std::endl;
               continue;
         
             case 'g':
@@ -47,24 +47,24 @@ process_args
         
             case 'r':
               radius = std::atoi(optarg);
-              std::cout << "radius " << radius << std::endl;
+//              std::cout << "radius " << radius << std::endl;
               continue;
         
             case 'v':
               {
                   std::string version{"0.1.0"};
-                  std::cout << "Version " << version << std::endl;
+//                  std::cout << "Version " << version << std::endl;
                   return false;
               }
         
             case 'x':
               size_x = std::atoi(optarg);
-              std::cout << "size_x " << size_x << std::endl;
+//              std::cout << "size_x " << size_x << std::endl;
               continue;
         
             case 'y':
               size_y = std::atoi(optarg);
-              std::cout << "size_y " << size_y << std::endl;
+//              std::cout << "size_y " << size_y << std::endl;
               continue;
         
             case '?':
