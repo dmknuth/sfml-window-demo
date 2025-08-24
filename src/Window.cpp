@@ -1,6 +1,7 @@
 #include "Window.hpp"
 #include "Balls.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <iostream>
 
@@ -103,7 +104,16 @@ Window::process_events()
             draw_grid();
         update_content();
         for(int i = 0; i < content -> get_count(); ++i)
+        {
             _window.draw(content->get_item(i));
+/*
+            sf::FloatRect temp;
+            temp = content->get_item(i).getGlobalBounds();
+            sf::RectangleShape rect;
+            rect.setSize(temp);
+            _window.draw(temp);
+*/
+        }
         _window.display();
     }
     return 0;

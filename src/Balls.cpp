@@ -1,6 +1,7 @@
 #include "Window.hpp"
 #include "Balls.hpp"
 #include <SFML/Window/Event.hpp>
+#include <SFML/System/Angle.hpp>
 #include <random>
 #include <iostream>
 #include <numbers>
@@ -64,6 +65,7 @@ Balls::update()
     const float d = 2.0 * radius;
     
     for(int i = 0; i < count; ++i)
+//    for(auto i : ball)
     {
         sf::Vector2f pos = ball[i]->getPosition();
         
@@ -90,7 +92,11 @@ Balls::update()
             else
                 pos.y = y_max - d - s * std::sinf(velocity[i].heading * kTwoPi / k360Degrees);
         }
-        ball[i]->setPosition(pos);
+        ball[i] -> setPosition(pos);
+        sf::Angle r = ball[i] -> getRotation();
+        using namespace sf::Literals;
+        r += 0.1_deg;
+//        ball[i] -> setRotation(r);
     }
     return 0;
 }
@@ -138,6 +144,6 @@ Balls::random_color()
     color.r = rand() % 256;
     color.g = rand() % 256;
     color.b = rand() % 256;
-    color.a = rand() % 224 + 32;
+    color.a = rand() % 128 + 128;
     return(color);
 }

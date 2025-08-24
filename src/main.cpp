@@ -3,6 +3,13 @@
 #include <iostream>
 #include <unistd.h>
 
+const   u_int16_t   k_x = 640;
+const   u_int16_t   k_y = 480;
+const   float       k_anti_alias = 1.1;
+const   u_int16_t   k_count = 1;
+const   u_int16_t   k_radius = 20;
+const   bool        k_grid = false;
+
 //----------------------------------------------------------------------------------------
 bool
 process_args
@@ -53,13 +60,20 @@ process_args
         case '?':
         case 'h':
         default :
-          printf("Help/Usage Example\n");
-          break;
+        std::cout << "usage:" << std::endl;
+        std::cout << "-x set the width of the window to create. The default is " << k_x << "." << std::endl;
+        std::cout << "-y set the height of the window to create. The default is " << k_y << "." << std::endl;
+        std::cout << "-a set the antialias amount.  The higher the number, the fuzzier the edges of the objects. The default is " << k_anti_alias << "." << std::endl;
+        std::cout << "-c set the number of objects to create. The default is " << k_count << "." << std::endl;
+        std::cout << "-r set the radius of the objects. The default is " << k_radius << "." << std::endl;
+        std::cout << "-g to display a grid. The default is no grid." << std::endl;
+        std::cout << "-h or any other character to display this message." << std::endl;
+        return false;
+            break;    
     
         case -1:
-          break;
-      }
-    
+            break;
+    }
       break;
     }
     return true;
@@ -68,12 +82,12 @@ process_args
 //----------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
-    u_int16_t   x = 640;
-    u_int16_t   y = 480;
-    float       anti_alias = 1.0;
-    u_int16_t   count = 1;
-    u_int16_t   radius = 20;
-    bool        grid = false;
+    u_int16_t   x = k_x;
+    u_int16_t   y = k_y;
+    float       anti_alias = k_anti_alias;
+    u_int16_t   count = k_count;
+    u_int16_t   radius = k_radius;
+    bool        grid = k_grid;
     
     if(process_args(argc, argv, x, y, anti_alias, count, radius, grid) == true)
     {
