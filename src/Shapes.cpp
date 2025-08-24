@@ -14,8 +14,9 @@ Shapes::generate()
     srand(time(0));
     for(int i = 0; i < count; ++i)
     {
-        sf::CircleShape* circle = new sf::CircleShape;
-        circle -> setRadius(radius);
+        sf::RectangleShape* circle = new sf::RectangleShape;
+//        circle -> setRadius(radius);
+        circle -> setSize({(float)radius, (float)radius});
         circle -> setFillColor(random_color());
         float x = (x_max - 2 * radius) / 2.0;
         float y = (y_max - 2 * radius) / 2.0;
@@ -50,10 +51,14 @@ Shapes::set_boundaries(u_int16_t x, u_int16_t y)
 }
 
 //----------------------------------------------------------------------------------------
-sf::CircleShape
+sf::RectangleShape
 Shapes::get_item(int i)
 {
-    return *reinterpret_cast<sf::CircleShape*>(shape[i]);
+//    return *reinterpret_cast<sf::RectangleShape*>(shape[i]);
+//    return *static_cast<sf::RectangleShape*>(shape[i]);
+//    if(typeid((shape[i])) == sf::RectangleShape*)
+        return *dynamic_cast<sf::RectangleShape*>(shape[i]);
+//    return *dynamic_cast<sf::RectangleShape*>(shape[i]);
 }
 
 //----------------------------------------------------------------------------------------
@@ -96,7 +101,7 @@ Shapes::update()
         sf::Angle r = shape[i] -> getRotation();
         using namespace sf::Literals;
         r += 0.1_deg;
-//        shape[i] -> setRotation(r);
+        shape[i] -> setRotation(r);
     }
     return 0;
 }

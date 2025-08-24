@@ -1,6 +1,6 @@
 #ifndef __Shapes__
 #define __Shapes__
-#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <vector>
 
@@ -18,7 +18,7 @@ class Shapes
         void            set_boundaries(u_int16_t, u_int16_t);
         void            generate();
         int             update();
-        sf::CircleShape get_item(int i);
+        sf::RectangleShape get_item(int i);
         int             get_count() { return count; }
         
     private:
