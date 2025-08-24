@@ -15,14 +15,14 @@ Shapes::generate()
     for(int i = 0; i < count; ++i)
     {
         sf::CircleShape* circle = new sf::CircleShape;
-        shape.push_back(circle); 
-        shape[i] -> setRadius(radius);
-        shape[i] -> setFillColor(random_color());
+        circle -> setRadius(radius);
+        circle -> setFillColor(random_color());
         float x = (x_max - 2 * radius) / 2.0;
         float y = (y_max - 2 * radius) / 2.0;
-        shape[i] -> setPosition({x, y});
+        circle -> setPosition({x, y});
         float speed = (float)(rand() % 50 + 1) / 100.0;
         float heading = (float)(rand() % 360);
+        shape.push_back(circle); 
         velocity.push_back(shape_struct(heading, speed));
     }
 }
@@ -53,7 +53,7 @@ Shapes::set_boundaries(u_int16_t x, u_int16_t y)
 sf::CircleShape
 Shapes::get_item(int i)
 {
-    return *shape[i];
+    return *reinterpret_cast<sf::CircleShape*>(shape[i]);
 }
 
 //----------------------------------------------------------------------------------------
