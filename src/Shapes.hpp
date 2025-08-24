@@ -1,16 +1,16 @@
-#ifndef __Balls__
-#define __Balls__
+#ifndef __Shapes__
+#define __Shapes__
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <vector>
 
-struct ball_struct
+struct shape_struct
 {
     float   heading;
     float   speed;
 };
 
-class Balls
+class Shapes
 {
     public:
         void            set_size(u_int16_t);
@@ -22,8 +22,8 @@ class Balls
         int             get_count() { return count; }
         
     private:
-        std::vector<sf::CircleShape*>   ball;
-        std::vector<ball_struct>        velocity;
+        std::vector<sf::CircleShape*>   shape;
+        std::vector<shape_struct>       velocity;
 
         sf::RenderWindow                _window;
         u_int16_t                       radius;

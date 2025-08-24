@@ -12,6 +12,6 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(WindowDemo src/main.cpp src/Window.cpp src/Balls.cpp)
+add_executable(WindowDemo src/main.cpp src/Window.cpp src/Shapes.cpp)
 target_compile_features(WindowDemo PRIVATE cxx_std_20)
 target_link_libraries(WindowDemo PRIVATE SFML::Graphics)

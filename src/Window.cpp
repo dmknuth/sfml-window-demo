@@ -1,5 +1,4 @@
 #include "Window.hpp"
-#include "Balls.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
@@ -32,7 +31,7 @@ Window::create()
 
 //----------------------------------------------------------------------------------------
 void
-Window::add_content(Balls* c)
+Window::add_content(Shapes* c)
 {   
     content = c;
     if(content != nullptr)

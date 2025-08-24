@@ -1,5 +1,5 @@
 #include "Window.hpp"
-#include "Balls.hpp"
+#include "Shapes.hpp"
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Angle.hpp>
 #include <random>
@@ -9,41 +9,41 @@
 
 //----------------------------------------------------------------------------------------
 void
-Balls::generate()
+Shapes::generate()
 {
     srand(time(0));
     for(int i = 0; i < count; ++i)
     {
         sf::CircleShape* circle = new sf::CircleShape;
-        ball.push_back(circle); 
-        ball[i] -> setRadius(radius);
-        ball[i] -> setFillColor(random_color());
+        shape.push_back(circle); 
+        shape[i] -> setRadius(radius);
+        shape[i] -> setFillColor(random_color());
         float x = (x_max - 2 * radius) / 2.0;
         float y = (y_max - 2 * radius) / 2.0;
-        ball[i] -> setPosition({x, y});
+        shape[i] -> setPosition({x, y});
         float speed = (float)(rand() % 50 + 1) / 100.0;
         float heading = (float)(rand() % 360);
-        velocity.push_back(ball_struct(heading, speed));
+        velocity.push_back(shape_struct(heading, speed));
     }
 }
 
 //----------------------------------------------------------------------------------------
 void
-Balls::set_size(u_int16_t r)
+Shapes::set_size(u_int16_t r)
 {
     radius = r;
 }
 
 //----------------------------------------------------------------------------------------
 void
-Balls::set_count(u_int16_t c)
+Shapes::set_count(u_int16_t c)
 {
     count = c;
 }
 
 //----------------------------------------------------------------------------------------
 void
-Balls::set_boundaries(u_int16_t x, u_int16_t y)
+Shapes::set_boundaries(u_int16_t x, u_int16_t y)
 {
     x_max = x;
     y_max = y;
@@ -51,23 +51,23 @@ Balls::set_boundaries(u_int16_t x, u_int16_t y)
 
 //----------------------------------------------------------------------------------------
 sf::CircleShape
-Balls::get_item(int i)
+Shapes::get_item(int i)
 {
-    return *ball[i];
+    return *shape[i];
 }
 
 //----------------------------------------------------------------------------------------
 int
-Balls::update()
+Shapes::update()
 {
     const float k360Degrees = 360.0;
     const float kTwoPi = 2.0 * std::numbers::pi;
     const float d = 2.0 * radius;
     
     for(int i = 0; i < count; ++i)
-//    for(auto i : ball)
+//    for(auto i : shape)
     {
-        sf::Vector2f pos = ball[i]->getPosition();
+        sf::Vector2f pos = shape[i]->getPosition();
         
         float s = velocity[i].speed;
         float h = velocity[i].heading;
@@ -92,18 +92,18 @@ Balls::update()
             else
                 pos.y = y_max - d - s * std::sinf(velocity[i].heading * kTwoPi / k360Degrees);
         }
-        ball[i] -> setPosition(pos);
-        sf::Angle r = ball[i] -> getRotation();
+        shape[i] -> setPosition(pos);
+        sf::Angle r = shape[i] -> getRotation();
         using namespace sf::Literals;
         r += 0.1_deg;
-//        ball[i] -> setRotation(r);
+//        shape[i] -> setRotation(r);
     }
     return 0;
 }
 
 //----------------------------------------------------------------------------------------
 sf::Color
-Balls::random_color()
+Shapes::random_color()
 {
     int c = rand() % 8;
     sf::Color color;
