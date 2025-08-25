@@ -13,7 +13,7 @@
     build/bin/WindowDemo -x 1400 -y 900 -a 10.0 -c 100 -r 40 -g
 
     build/bin/WindowDemo -h
-        usage:
+    usage:
     -a set the antialias amount.  The higher the number, the fuzzier the edges of the objects. The default is 1.1.
     -c set the number of objects to create. The default is 1.
     -g to display a grid. The default is no grid.
