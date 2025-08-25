@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
     
     if(process_args(argc, argv, x, y, anti_alias, count, radius, grid) == true)
     {
-        Window* window = new Window();
+       auto window = std::make_unique<Window>();
         if(window != nullptr)
         {
             window -> configure(x, y, anti_alias, grid) -> create();
@@ -118,7 +118,6 @@ int main(int argc, char* argv[])
             shape_vector -> generate();
             window -> add_content(shape_vector);
             window -> process_events();
-            delete window;
         }
         else
         {

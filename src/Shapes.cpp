@@ -6,6 +6,7 @@
 #include <iostream>
 #include <numbers>
 #include <cmath>
+#include <memory>
 
 //----------------------------------------------------------------------------------------
 void
@@ -14,17 +15,18 @@ Shapes::generate()
     srand(time(0));
     for(int i = 0; i < count; ++i)
     {
-        sf::RectangleShape* circle = new sf::RectangleShape;
-//        circle -> setRadius(radius);
-        circle -> setSize({(float)radius, (float)radius});
-        circle -> setOrigin({radius * 0.5f, radius * 0.5f});
-        circle -> setFillColor(random_color());
+//        sf::RectangleShape* new_shape = new sf::RectangleShape;
+        auto new_shape = std::make_unique<sf::RectangleShape>();
+//        new_shape -> setRadius(radius);
+        new_shape -> setSize({(float)radius, (float)radius});
+        new_shape -> setOrigin({radius * 0.5f, radius * 0.5f});
+        new_shape -> setFillColor(random_color());
         float x = (x_max - 2 * radius) / 2.0;
         float y = (y_max - 2 * radius) / 2.0;
-        circle -> setPosition({x, y});
+        new_shape -> setPosition({x, y});
         float speed = (float)(rand() % 50 + 1) / 100.0;
         float heading = (float)(rand() % 360);
-        shape.push_back(circle); 
+        shape.push_back(std::move(new_shape)); 
         velocity.push_back(shape_struct(heading, speed));
     }
 }
@@ -58,7 +60,8 @@ Shapes::get_item(int i)
 //    return *reinterpret_cast<sf::RectangleShape*>(shape[i]);
 //    return *static_cast<sf::RectangleShape*>(shape[i]);
 //    if(typeid((shape[i])) == sf::RectangleShape*)
-        return *dynamic_cast<sf::RectangleShape*>(shape[i]);
+//    return *dynamic_cast<sf::RectangleShape*>(shape[i]);
+    return *shape[i];
 //    return *dynamic_cast<sf::RectangleShape*>(shape[i]);
 }
 

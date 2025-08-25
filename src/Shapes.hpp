@@ -22,7 +22,7 @@ class Shapes
         int             get_count() { return count; }
         
     private:
-        std::vector<sf::Shape*>   shape;
+        std::vector<std::unique_ptr<sf::RectangleShape>> shape;
         std::vector<shape_struct>       velocity;
 
         sf::RenderWindow                _window;
