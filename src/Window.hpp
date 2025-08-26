@@ -1,12 +1,13 @@
 #ifndef __Window__
 #define __Window__
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include "Shapes.hpp"
 
 class Window
 {
     public:
-        Window*     configure(u_int16_t, u_int16_t, float, bool);
+        Window*     configure(u_int16_t, u_int16_t, float, u_int16_t, u_int16_t, bool);
         Window*     create();
         int         process_events();
         void        add_content(Shapes*);
@@ -18,8 +19,11 @@ class Window
         sf::ContextSettings settings;
         sf::RenderWindow    _window;
         Shapes*             content;
-        int                 count;
+        u_int16_t           count;
+        u_int16_t           radius;
+        sf::Font            font;
         void        update_content();
         void        draw_grid();
+        void        display_instrumentation();
 };
 #endif

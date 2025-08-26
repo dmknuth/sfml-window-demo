@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
        auto window = std::make_unique<Window>();
         if(window != nullptr)
         {
-            window -> configure(x, y, anti_alias, grid) -> create();
+            window -> configure(x, y, anti_alias, count, radius, grid) -> create();
             Shapes* shape_vector = new Shapes();
             if(shape_vector == nullptr)
             {

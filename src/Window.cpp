@@ -2,7 +2,11 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <iostream>
+#include <chrono>
+#include <ctime>
+#include <unistd.h>
 
 //----------------------------------------------------------------------------------------
 Window*
@@ -11,12 +15,16 @@ Window::configure
     u_int16_t   x,
     u_int16_t   y,
     float       anti_alias,
+    u_int16_t   c,
+    u_int16_t   r,
     bool        g
 )
 {
     size_x = x;
     size_y = y;
     settings.antiAliasingLevel = anti_alias;
+    count = c;
+    radius = r;
     grid = g;
     return this;
 }
@@ -26,6 +34,8 @@ Window*
 Window::create()
 {
     _window = sf::RenderWindow(sf::VideoMode({size_x, size_y}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
+    if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc"))
+        std::cerr << "Could not load font." << std::endl;
     return this;
 }
 
@@ -83,6 +93,62 @@ Window::draw_grid()
 }
 
 //----------------------------------------------------------------------------------------
+void
+Window::display_instrumentation()
+{
+    const float k_leading = 12.0;
+    const int k_font_size = 12;
+    sf::Vector2f    pos({10.0f, 10.0f});
+
+    // Count
+    {
+        std::ostringstream i_count;
+        i_count << "Count: " << count;
+        sf::Text count_str(font, i_count.str(), k_font_size);
+        count_str.setFillColor(sf::Color::Black);
+        count_str.setPosition(pos);
+        sf::FloatRect gb = count_str.getGlobalBounds();
+//      std::cout << "g.pos(" << gb.position.x << ", " << gb.position.y << ")" << std::endl;
+//      std::cout << "g.size(" << gb.size.x << ", " << gb.size.y << ")" << std::endl;
+        _window.draw(count_str);
+    }
+    // Radius
+    {
+        std::ostringstream i_radius;
+        i_radius << "Radius: " << radius;
+        sf::Text radius_str(font, i_radius.str(), k_font_size);
+        radius_str.setFillColor(sf::Color::Black);
+        pos.y += k_leading;
+        radius_str.setPosition(pos);
+        _window.draw(radius_str);
+    }
+    // Frame Rate
+    {
+        const int k_frame_max = 1000;
+        static double fps = (double)k_frame_max;
+        std::ostringstream frame_time;
+        static int frames = 0;
+        static std::chrono::time_point<std::chrono::system_clock> last_time;
+        auto current_time = std::chrono::system_clock::now();
+        std::chrono::duration<double> elapsed_seconds = current_time - last_time;
+        frames++;
+        frame_time << "FPS: " << fps;
+        if(frames >= k_frame_max)
+        {
+            fps = (double)k_frame_max / elapsed_seconds.count();
+            last_time = current_time;
+            frames = 0;
+        }
+        sf::Text framerate(font, frame_time.str(), k_font_size);
+        framerate.setFillColor(sf::Color::Black);
+        pos.y += k_leading;
+        framerate.setPosition(pos);
+        _window.draw(framerate);
+    }
+    usleep(1);
+}
+
+//----------------------------------------------------------------------------------------
 int
 Window::process_events()
 {
@@ -113,6 +179,7 @@ Window::process_events()
             _window.draw(temp);
 */
         }
+       display_instrumentation();
         _window.display();
     }
     return 0;
