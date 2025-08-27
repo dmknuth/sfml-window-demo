@@ -36,6 +36,34 @@ Window::create()
     _window = sf::RenderWindow(sf::VideoMode({size_x, size_y}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
     if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc"))
         std::cerr << "Could not load font." << std::endl;
+
+    const int kGridSpacing = 50;
+    int mid_x = size_x / 2;
+    int mid_y = size_y / 2;
+    sf::VertexArray lines(sf::PrimitiveType::Lines, 2);
+    for(int x = mid_x; x < size_x; x += kGridSpacing)
+    {
+        lines[0].position = sf::Vector2f(x, 0);
+        lines[1].position = sf::Vector2f(x, size_y);
+        lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
+        grid_lines.push_back(lines);
+        lines[0].position = sf::Vector2f(x - mid_x, 0);
+        lines[1].position = sf::Vector2f(x - mid_x, size_y);
+        lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
+        grid_lines.push_back(lines);
+    }
+    for(int y = mid_y; y < size_y; y += kGridSpacing)
+    {
+        lines[0].position = sf::Vector2f(0, y);
+        lines[1].position = sf::Vector2f(size_x, y);
+        lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
+        grid_lines.push_back(lines);
+        lines[0].position = sf::Vector2f(0, y - mid_y);
+        lines[1].position = sf::Vector2f(size_x, y - mid_y);
+        lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
+        grid_lines.push_back(lines);
+    }
+
     return this;
 }
 
@@ -64,31 +92,9 @@ Window::update_content()
 void
 Window::draw_grid()
 {
-    const int kGridSpacing = 50;
-    int mid_x = size_x / 2;
-    int mid_y = size_y / 2;
-    sf::VertexArray lines(sf::PrimitiveType::Lines, 2);
-    for(int x = mid_x; x < size_x; x += kGridSpacing)
+    for(auto i : grid_lines)
     {
-        lines[0].position = sf::Vector2f(x, 0);
-        lines[1].position = sf::Vector2f(x, size_y);
-        lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
-        _window.draw(lines);        
-        lines[0].position = sf::Vector2f(x - mid_x, 0);
-        lines[1].position = sf::Vector2f(x - mid_x, size_y);
-        lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
-        _window.draw(lines);        
-    }
-    for(int y = mid_y; y < size_y; y += kGridSpacing)
-    {
-        lines[0].position = sf::Vector2f(0, y);
-        lines[1].position = sf::Vector2f(size_x, y);
-        lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
-        _window.draw(lines);        
-        lines[0].position = sf::Vector2f(0, y - mid_y);
-        lines[1].position = sf::Vector2f(size_x, y - mid_y);
-        lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
-        _window.draw(lines);        
+        _window.draw(i);      
     }
 }
 
@@ -171,13 +177,6 @@ Window::process_events()
         for(int i = 0; i < content -> get_count(); ++i)
         {
             _window.draw(content->get_item(i));
-/*
-            sf::FloatRect temp;
-            temp = content->get_item(i).getGlobalBounds();
-            sf::RectangleShape rect;
-            rect.setSize(temp);
-            _window.draw(temp);
-*/
         }
        display_instrumentation();
         _window.display();

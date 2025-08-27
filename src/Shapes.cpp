@@ -74,7 +74,6 @@ Shapes::update()
     const float d = radius / 2.0f;
 
     for(int i = 0; i < count; ++i)
-//    for(auto i : shape)
     {
         sf::Vector2f pos = shape[i]->getPosition();
         
@@ -83,8 +82,6 @@ Shapes::update()
         
         pos.x += (s * std::cosf(h * kTwoPi / k360Degrees));
         pos.y += (s * std::sinf(h * kTwoPi / k360Degrees));
-//        pos.x = x_max / 2.0f;
-//        pos.y = y_max / 2.0f;
         
         if((pos.x < d) || ((pos.x + d) > x_max))
         {
