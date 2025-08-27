@@ -1,6 +1,6 @@
 # Window Demo using the SFML framework
 
-## For macOS
+## For macOS.
 
 1. Install SFML and CMake, if needed
 2. After cloning this repo, build it with
