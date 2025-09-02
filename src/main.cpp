@@ -96,15 +96,41 @@ process_args
 }
 
 //----------------------------------------------------------------------------------------
-int main(int argc, char* argv[])
+void
+init_arg_struct(struct arg_struct& arg_list)
 {
-    struct arg_struct arg_list;
     arg_list.width = k_width;
     arg_list.height = k_height;
     arg_list.anti_alias = k_anti_alias;
     arg_list.count = k_count;
     arg_list.radius = k_radius;
     arg_list.grid = k_grid;
+}
+
+//----------------------------------------------------------------------------------------
+std::unique_ptr<Shapes>
+create_shapes(const struct arg_struct* arg_list)
+{
+//    Shapes* shape_vector = new Shapes();
+    auto shape_vector = std::make_unique<Shapes>();
+    if(shape_vector == nullptr)
+    {
+        std::cerr << "shape_vector could not be created" << std::endl;
+        return nullptr;
+    }
+    shape_vector -> set_size(arg_list -> radius);
+    shape_vector -> set_count(arg_list -> count);
+    shape_vector -> set_boundaries(arg_list -> width, arg_list -> height);
+    shape_vector -> generate();
+    return shape_vector;
+}
+
+//----------------------------------------------------------------------------------------
+int main(int argc, char* argv[])
+{
+
+    struct arg_struct arg_list;
+    init_arg_struct(arg_list);
     
     if(process_args(argc, argv, &arg_list) == true)
     {
@@ -112,25 +138,23 @@ int main(int argc, char* argv[])
         if(window != nullptr)
         {
             window -> configure(arg_list.width, arg_list.height, arg_list.anti_alias, arg_list.count, arg_list.radius, arg_list.grid) -> create();
-            Shapes* shape_vector = new Shapes();
-            if(shape_vector == nullptr)
+            std::unique_ptr<Shapes> shape_vector = std::move(create_shapes(&arg_list));
+            if(shape_vector != nullptr)
             {
-                std::cerr << "shape_vector could not be created" << std::endl;
+                window -> add_content(std::move(shape_vector));
+                window -> process_events();
+            }
+            else
+            {
+                std::cerr << "shpaes could not be created" << std::endl;
                 return -1;
             }
-            shape_vector -> set_size(arg_list.radius);
-            shape_vector -> set_count(arg_list.count);
-            shape_vector -> set_boundaries(arg_list.width, arg_list.height);
-            shape_vector -> generate();
-            window -> add_content(shape_vector);
-            window -> process_events();
         }
         else
         {
             std::cerr << "window could not be created" << std::endl;
             return -1;
         }
-        
     }
     return 0;
 }

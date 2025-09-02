@@ -69,9 +69,9 @@ Window::create()
 
 //----------------------------------------------------------------------------------------
 void
-Window::add_content(Shapes* c)
+Window::add_content(std::unique_ptr<Shapes> c)
 {   
-    content = c;
+    content = std::move(c);
     if(content != nullptr)
         content -> update();
     else

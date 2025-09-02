@@ -11,7 +11,7 @@ class Window
         Window*     configure(u_int16_t, u_int16_t, float, u_int16_t, u_int16_t, bool);
         Window*     create();
         int         process_events();
-        void        add_content(Shapes*);
+        void        add_content(std::unique_ptr<Shapes>);
         
     private:
         bool                            grid;
@@ -19,7 +19,7 @@ class Window
         u_int16_t                       size_y;
         sf::ContextSettings             settings;
         sf::RenderWindow                _window;
-        Shapes*                         content;
+        std::unique_ptr<Shapes>         content;
         u_int16_t                       count;
         u_int16_t                       radius;
         sf::Font                        font;
