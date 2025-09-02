@@ -8,6 +8,8 @@
 #include <ctime>
 #include <unistd.h>
 
+const   bool    k_quit = false;
+
 //----------------------------------------------------------------------------------------
 Window*
 Window::configure
@@ -30,13 +32,9 @@ Window::configure
 }
 
 //----------------------------------------------------------------------------------------
-Window*
-Window::create()
+void
+Window::create_grid()
 {
-    _window = sf::RenderWindow(sf::VideoMode({size_x, size_y}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
-    if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc"))
-        std::cerr << "Could not load font." << std::endl;
-
     const int kGridSpacing = 50;
     int mid_x = size_x / 2;
     int mid_y = size_y / 2;
@@ -63,7 +61,15 @@ Window::create()
         lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
         grid_lines.push_back(lines);
     }
-
+}
+//----------------------------------------------------------------------------------------
+Window*
+Window::create()
+{
+    _window = sf::RenderWindow(sf::VideoMode({size_x, size_y}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
+    if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc"))
+        std::cerr << "Could not load font." << std::endl;
+    create_grid();
     return this;
 }
 
@@ -75,7 +81,7 @@ Window::add_content(std::unique_ptr<Shapes> c)
     if(content != nullptr)
         content -> update();
     else
-        std::cout << "No content" << std::endl;
+        std::cerr << "add_content() failed: content pointer is null" << std::endl;
 }
 
 //----------------------------------------------------------------------------------------
@@ -85,7 +91,7 @@ Window::update_content()
     if(content != nullptr)
         content -> update();
     else
-        exit(-2);
+        std::cerr << "update_content() failed: content pointer is null" << std::endl;
 }
 
 //----------------------------------------------------------------------------------------
@@ -113,7 +119,7 @@ Window::display_instrumentation()
         sf::Text count_str(font, i_count.str(), k_font_size);
         count_str.setFillColor(sf::Color::Black);
         count_str.setPosition(pos);
-        sf::FloatRect gb = count_str.getGlobalBounds();
+//        sf::FloatRect gb = count_str.getGlobalBounds();
 //      std::cout << "g.pos(" << gb.position.x << ", " << gb.position.y << ")" << std::endl;
 //      std::cout << "g.size(" << gb.size.x << ", " << gb.size.y << ")" << std::endl;
         _window.draw(count_str);
@@ -155,20 +161,29 @@ Window::display_instrumentation()
 }
 
 //----------------------------------------------------------------------------------------
+bool
+Window::handle_keystrokes()
+{
+    while (const std::optional event = _window.pollEvent())
+    {
+         if (event->is<sf::Event::Closed>() ||
+            (event->is<sf::Event::KeyPressed>() &&
+            (event->getIf<sf::Event::KeyPressed>()->code) == sf::Keyboard::Key::Escape))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+//----------------------------------------------------------------------------------------
 int
 Window::process_events()
 {
     while (_window.isOpen())
     {
-        while (const std::optional event = _window.pollEvent())
-        {
-             if (event->is<sf::Event::Closed>() ||
-                (event->is<sf::Event::KeyPressed>() &&
-                (event->getIf<sf::Event::KeyPressed>()->code) == sf::Keyboard::Key::Escape))
-            {
-                _window.close();
-            }
-        }
+        if(handle_keystrokes() == k_quit)
+            _window.close();
         
         _window.clear(sf::Color::White);
         if(grid)
@@ -178,7 +193,7 @@ Window::process_events()
         {
             _window.draw(content->get_item(i));
         }
-       display_instrumentation();
+        display_instrumentation();
         _window.display();
     }
     return 0;

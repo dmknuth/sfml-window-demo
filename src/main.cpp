@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
             }
             else
             {
-                std::cerr << "shpaes could not be created" << std::endl;
+                std::cerr << "shapes could not be created" << std::endl;
                 return -1;
             }
         }

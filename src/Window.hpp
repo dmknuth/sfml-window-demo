@@ -10,6 +10,8 @@ class Window
     public:
         Window*     configure(u_int16_t, u_int16_t, float, u_int16_t, u_int16_t, bool);
         Window*     create();
+        bool        handle_keystrokes();
+        void        create_grid();
         int         process_events();
         void        add_content(std::unique_ptr<Shapes>);
         
