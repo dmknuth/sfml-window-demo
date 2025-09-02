@@ -62,6 +62,7 @@ Window::create_grid()
         grid_lines.push_back(lines);
     }
 }
+
 //----------------------------------------------------------------------------------------
 Window*
 Window::create()
@@ -183,18 +184,23 @@ Window::process_events()
     while (_window.isOpen())
     {
         if(handle_keystrokes() == k_quit)
-            _window.close();
-        
-        _window.clear(sf::Color::White);
-        if(grid)
-            draw_grid();
-        update_content();
-        for(int i = 0; i < content -> get_count(); ++i)
         {
-            _window.draw(content->get_item(i));
+            _window.close();
+            return -1;
         }
-        display_instrumentation();
-        _window.display();
+        else
+        {
+            _window.clear(sf::Color::White);
+            if(grid)
+                draw_grid();
+            update_content();
+            for(int i = 0; i < content -> get_count(); ++i)
+            {
+                _window.draw(content->get_item(i));
+            }
+            display_instrumentation();
+            _window.display();
+        }
     }
     return 0;
 }

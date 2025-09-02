@@ -1,5 +1,6 @@
 #ifndef __Shapes__
 #define __Shapes__
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <vector>
