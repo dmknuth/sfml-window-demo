@@ -131,7 +131,7 @@ Application::run()
 {  
     if(quit)
         return -1;
-    auto window = std::make_unique<Window>();
+    auto window = std::make_unique<Window>(300, 200, 50, 50);
     if(window != nullptr)
     {
         window -> configure(arg_list.width, arg_list.height, arg_list.anti_alias, arg_list.count, arg_list.radius, arg_list.grid) -> create();

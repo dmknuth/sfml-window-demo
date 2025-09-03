@@ -22,8 +22,8 @@ Window::configure
     bool        g
 )
 {
-    size_x = x;
-    size_y = y;
+    width = x;
+    height = y;
     settings.antiAliasingLevel = anti_alias;
     count = c;
     radius = r;
@@ -36,28 +36,28 @@ void
 Window::create_grid()
 {
     const int kGridSpacing = 50;
-    int mid_x = size_x / 2;
-    int mid_y = size_y / 2;
+    int mid_x = width / 2;
+    int mid_y = height / 2;
     sf::VertexArray lines(sf::PrimitiveType::Lines, 2);
-    for(int x = mid_x; x < size_x; x += kGridSpacing)
+    for(int x = mid_x; x < width; x += kGridSpacing)
     {
         lines[0].position = sf::Vector2f(x, 0);
-        lines[1].position = sf::Vector2f(x, size_y);
+        lines[1].position = sf::Vector2f(x, height);
         lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
         grid_lines.push_back(lines);
         lines[0].position = sf::Vector2f(x - mid_x, 0);
-        lines[1].position = sf::Vector2f(x - mid_x, size_y);
+        lines[1].position = sf::Vector2f(x - mid_x, height);
         lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
         grid_lines.push_back(lines);
     }
-    for(int y = mid_y; y < size_y; y += kGridSpacing)
+    for(int y = mid_y; y < height; y += kGridSpacing)
     {
         lines[0].position = sf::Vector2f(0, y);
-        lines[1].position = sf::Vector2f(size_x, y);
+        lines[1].position = sf::Vector2f(width, y);
         lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
         grid_lines.push_back(lines);
         lines[0].position = sf::Vector2f(0, y - mid_y);
-        lines[1].position = sf::Vector2f(size_x, y - mid_y);
+        lines[1].position = sf::Vector2f(width, y - mid_y);
         lines[0].color = lines[1].color = sf::Color(sf::Color(0, 128, 128, 32));
         grid_lines.push_back(lines);
     }
@@ -67,7 +67,7 @@ Window::create_grid()
 Window*
 Window::create()
 {
-    _window = sf::RenderWindow(sf::VideoMode({size_x, size_y}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
+    _window = sf::RenderWindow(sf::VideoMode({width, height}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
     if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc"))
         std::cerr << "Could not load font." << std::endl;
     create_grid();

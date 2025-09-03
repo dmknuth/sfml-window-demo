@@ -8,6 +8,9 @@
 class Window
 {
     public:
+                    Window() {};
+                    Window(u_int16_t w, u_int16_t h , u_int16_t x , u_int16_t y) : width(w), height(h), position({x, y}) {};
+
         Window*     configure(u_int16_t, u_int16_t, float, u_int16_t, u_int16_t, bool);
         Window*     create();
         bool        handle_keystrokes();
@@ -17,8 +20,9 @@ class Window
         
     private:
         bool                            grid;
-        u_int16_t                       size_x;
-        u_int16_t                       size_y;
+        u_int16_t                       width;
+        u_int16_t                       height;
+        sf::Vector2i                    position;
         sf::ContextSettings             settings;
         sf::RenderWindow                _window;
         std::unique_ptr<Shapes>         content;
