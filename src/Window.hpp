@@ -12,6 +12,7 @@ class Window
                     Window(u_int16_t w, u_int16_t h , u_int16_t x , u_int16_t y) : width(w), height(h), position({x, y}) {};
 
         Window*     configure(u_int16_t, u_int16_t, float, u_int16_t, u_int16_t, bool);
+        Window*     configure(float, u_int16_t, u_int16_t, bool);
         Window*     create();
         bool        handle_keystrokes();
         void        create_grid();

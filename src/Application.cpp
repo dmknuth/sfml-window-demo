@@ -4,8 +4,8 @@
 #include <iostream>
 #include <unistd.h>
 
-const   u_int16_t   k_width = 640;
-const   u_int16_t   k_height = 480;
+const   u_int16_t   k_width = 300;
+const   u_int16_t   k_height = 200;
 const   float       k_anti_alias = 1.1;
 const   u_int16_t   k_count = 1;
 const   u_int16_t   k_radius = 20;
@@ -131,10 +131,11 @@ Application::run()
 {  
     if(quit)
         return -1;
-    auto window = std::make_unique<Window>(300, 200, 50, 50);
+    auto window = std::make_unique<Window>(arg_list.width, arg_list.height, 50, 50);
     if(window != nullptr)
     {
-        window -> configure(arg_list.width, arg_list.height, arg_list.anti_alias, arg_list.count, arg_list.radius, arg_list.grid) -> create();
+        window -> configure(arg_list.anti_alias, arg_list.count, arg_list.radius, arg_list.grid);
+        window -> create();
         std::unique_ptr<Shapes> shape_vector = std::move(create_shapes(&arg_list));
         if(shape_vector != nullptr)
         {

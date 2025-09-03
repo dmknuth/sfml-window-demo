@@ -32,6 +32,23 @@ Window::configure
 }
 
 //----------------------------------------------------------------------------------------
+Window*
+Window::configure
+(
+    float       anti_alias,
+    u_int16_t   c,
+    u_int16_t   r,
+    bool        g
+)
+{
+    settings.antiAliasingLevel = anti_alias;
+    count = c;
+    radius = r;
+    grid = g;
+    return this;
+}
+
+//----------------------------------------------------------------------------------------
 void
 Window::create_grid()
 {
@@ -68,8 +85,10 @@ Window*
 Window::create()
 {
     _window = sf::RenderWindow(sf::VideoMode({width, height}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
-    if (!font.openFromFile("/System/Library/Fonts/Helvetica.ttc"))
+    _window.setPosition(position);
+    if (!font.openFromFile("./resources/Monaco.ttf"))
         std::cerr << "Could not load font." << std::endl;
+    font.setSmooth(true);
     create_grid();
     return this;
 }
@@ -110,7 +129,7 @@ void
 Window::display_instrumentation()
 {
     const float k_leading = 12.0;
-    const int k_font_size = 12;
+    const int k_font_size = 14;
     sf::Vector2f    pos({10.0f, 10.0f});
 
     // Count
