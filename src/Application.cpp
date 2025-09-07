@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <unistd.h>
+#include <cassert>
 
 const   u_int16_t   k_width = 300;
 const   u_int16_t   k_height = 200;
@@ -104,11 +105,7 @@ Application::create_shapes(const struct arg_struct* arg_list)
 {
 //    Shapes* shape_vector = new Shapes();
     auto shape_vector = std::make_unique<Shapes>();
-    if(shape_vector == nullptr)
-    {
-        std::cerr << "shape_vector could not be created" << std::endl;
-        return nullptr;
-    }
+    assert(shape_vector != nullptr);
     shape_vector -> set_size(arg_list -> radius);
     shape_vector -> set_count(arg_list -> count);
     shape_vector -> set_boundaries(arg_list -> width, arg_list -> height);
@@ -132,27 +129,16 @@ Application::run()
     if(quit)
         return -1;
     auto window = std::make_unique<Window>(arg_list.width, arg_list.height, 50, 50);
-    if(window != nullptr)
-    {
-        window -> configure(arg_list.anti_alias, arg_list.count, arg_list.radius, arg_list.grid);
-        window -> create();
-        std::unique_ptr<Shapes> shape_vector = std::move(create_shapes(&arg_list));
-        if(shape_vector != nullptr)
-        {
-            window -> add_content(std::move(shape_vector));
-            if(window -> process_events() < 0)
-                return 0;
-        }
-        else
-        {
-            std::cerr << "shapes could not be created" << std::endl;
-            return -1;
-        }
-    }
-    else
-    {
-        std::cerr << "window could not be created" << std::endl;
-        return -1;
-    }
+    assert(window != nullptr);
+
+    window -> configure(arg_list.anti_alias, arg_list.count, arg_list.radius, arg_list.grid);
+    window -> create();
+    std::unique_ptr<Shapes> shape_vector = std::move(create_shapes(&arg_list));
+    assert(shape_vector != nullptr);
+
+    window -> add_content(std::move(shape_vector));
+    if(window -> process_events() < 0)
+        return 0;
+
     return 0;
 }

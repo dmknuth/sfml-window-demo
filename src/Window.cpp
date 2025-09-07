@@ -98,20 +98,16 @@ void
 Window::add_content(std::unique_ptr<Shapes> c)
 {   
     content = std::move(c);
-    if(content != nullptr)
-        content -> update();
-    else
-        std::cerr << "add_content() failed: content pointer is null" << std::endl;
+    assert(content != nullptr);
+    content -> update();
 }
 
 //----------------------------------------------------------------------------------------
 void
 Window::update_content()
 {
-    if(content != nullptr)
-        content -> update();
-    else
-        std::cerr << "update_content() failed: content pointer is null" << std::endl;
+    assert(content != nullptr);
+    content -> update();
 }
 
 //----------------------------------------------------------------------------------------
