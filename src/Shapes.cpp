@@ -17,12 +17,12 @@ Shapes::generate()
     {
 //        sf::RectangleShape* new_shape = new sf::RectangleShape;
         auto new_shape = std::make_unique<sf::RectangleShape>();
-//        new_shape -> setRadius(radius);
-        new_shape -> setSize({(float)radius, (float)radius});
-        new_shape -> setOrigin({radius * 0.5f, radius * 0.5f});
+//        new_shape -> setRadius(size);
+        new_shape -> setSize({(float)size, (float)size});
+        new_shape -> setOrigin({size * 0.5f, size * 0.5f});
         new_shape -> setFillColor(random_color());
-        float x = (x_max - 2 * radius) / 2.0;
-        float y = (y_max - 2 * radius) / 2.0;
+        float x = (x_max - 2 * size) / 2.0;
+        float y = (y_max - 2 * size) / 2.0;
         new_shape -> setPosition({x, y});
         float speed = (float)(rand() % 50 + 1) / 100.0;
         float heading = (float)(rand() % 360);
@@ -33,9 +33,9 @@ Shapes::generate()
 
 //----------------------------------------------------------------------------------------
 void
-Shapes::set_size(u_int16_t r)
+Shapes::set_size(u_int16_t s)
 {
-    radius = r;
+    size = s;
 }
 
 //----------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ Shapes::update()
 {
     const float k360Degrees = 360.0f;
     const float kTwoPi = 2.0f * std::numbers::pi;
-    const float d = radius / 2.0f;
+    const float d = size / 2.0f;
 
     for(int i = 0; i < count; ++i)
     {

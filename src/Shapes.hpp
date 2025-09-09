@@ -27,7 +27,7 @@ class Shapes
         std::vector<shape_struct>       velocity;
 
         sf::RenderWindow                _window;
-        u_int16_t                       radius;
+        u_int16_t                       size;
         u_int16_t                       count;
         u_int16_t                       x_max;
         u_int16_t                       y_max;

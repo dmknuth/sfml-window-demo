@@ -2,6 +2,7 @@
 #define __Window__
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include "Application.hpp"
 #include "Shapes.hpp"
 #include <vector>
 
@@ -11,8 +12,7 @@ class Window
                     Window() {};
                     Window(u_int16_t w, u_int16_t h , u_int16_t x , u_int16_t y) : width(w), height(h), position({x, y}) {};
 
-        Window*     configure(u_int16_t, u_int16_t, float, u_int16_t, u_int16_t, bool);
-        Window*     configure(float, u_int16_t, u_int16_t, bool);
+        Window*     configure(const struct arg_struct*);
         Window*     create();
         bool        handle_keystrokes();
         void        create_grid();
@@ -28,7 +28,7 @@ class Window
         sf::RenderWindow                _window;
         std::unique_ptr<Shapes>         content;
         u_int16_t                       count;
-        u_int16_t                       radius;
+        u_int16_t                       size;
         sf::Font                        font;
         std::vector<sf::VertexArray>    grid_lines;
         void                            update_content();

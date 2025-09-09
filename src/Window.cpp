@@ -14,37 +14,17 @@ const   bool    k_quit = false;
 Window*
 Window::configure
 (
-    u_int16_t   x,
-    u_int16_t   y,
-    float       anti_alias,
-    u_int16_t   c,
-    u_int16_t   r,
-    bool        g
+    const struct arg_struct* args
 )
 {
-    width = x;
-    height = y;
-    settings.antiAliasingLevel = anti_alias;
-    count = c;
-    radius = r;
-    grid = g;
-    return this;
-}
-
-//----------------------------------------------------------------------------------------
-Window*
-Window::configure
-(
-    float       anti_alias,
-    u_int16_t   c,
-    u_int16_t   r,
-    bool        g
-)
-{
-    settings.antiAliasingLevel = anti_alias;
-    count = c;
-    radius = r;
-    grid = g;
+    width = args -> width;
+    height = args -> height;
+    settings.antiAliasingLevel = args -> anti_alias;
+    count = args -> count;
+    size = args -> size;
+    position.x = args -> pos_x;
+    position.y = args -> pos_y;
+    grid = args -> grid;
     return this;
 }
 
@@ -142,13 +122,13 @@ Window::display_instrumentation()
     }
     // Radius
     {
-        std::ostringstream i_radius;
-        i_radius << "Radius: " << radius;
-        sf::Text radius_str(font, i_radius.str(), k_font_size);
-        radius_str.setFillColor(sf::Color::Black);
+        std::ostringstream i_size;
+        i_size << "Size: " << size;
+        sf::Text size_str(font, i_size.str(), k_font_size);
+        size_str.setFillColor(sf::Color::Black);
         pos.y += k_leading;
-        radius_str.setPosition(pos);
-        _window.draw(radius_str);
+        size_str.setPosition(pos);
+        _window.draw(size_str);
     }
     // Frame Rate
     {
