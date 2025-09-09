@@ -28,16 +28,16 @@ Application::process_args
 {
     for(;;)
     {
-        switch(getopt(argc, argv, "a:c:ghr:s:vw:x:y:"))
+        switch(getopt(argc, argv, "a:c:gh:r:s:vw:x:y:"))
         {
             case 'a':
               arg_list -> anti_alias = std::strtof(optarg, 0);
-//              std::cout << "anti_alias " << anti_alias << std::endl;
+              std::cout << "anti_alias " << arg_list -> anti_alias << std::endl;
               continue;
         
             case 'c':
               arg_list -> count = std::atoi(optarg);
-//              std::cout << "count " << count << std::endl;
+              std::cout << "count " << arg_list -> count << std::endl;
               continue;
         
             case 'g':
@@ -46,34 +46,34 @@ Application::process_args
         
             case 's':
               arg_list -> size = std::atoi(optarg);
-//              std::cout << "size " << size << std::endl;
+              std::cout << "size " << arg_list -> size << std::endl;
               continue;
         
             case 'v':
               {
                   std::string version{"0.1.0"};
-//                  std::cout << "Version " << version << std::endl;
+                  std::cout << "Version " << version << std::endl;
                   return false;
               }
         
             case 'w':
               arg_list -> width = std::atoi(optarg);
-//              std::cout << "size_x " << size_x << std::endl;
+              std::cout << "width " << arg_list -> width << std::endl;
               continue;
         
             case 'h':
               arg_list -> height = std::atoi(optarg);
-//              std::cout << "size_y " << size_y << std::endl;
+              std::cout << "height " << arg_list -> height << std::endl;
               continue;
         
             case 'x':
               arg_list -> pos_x = std::atoi(optarg);
-//              std::cout << "pos_x " << pos_x << std::endl;
+              std::cout << "pos_x " << arg_list -> pos_x << std::endl;
               continue;
         
             case 'y':
               arg_list -> pos_y = std::atoi(optarg);
-//              std::cout << "size_y " << size_y << std::endl;
+              std::cout << "pos_y " << arg_list -> pos_y << std::endl;
               continue;
         
             case '?':
