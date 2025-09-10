@@ -24,7 +24,7 @@ Shapes::generate()
         float x = (x_max - 2 * size) / 2.0;
         float y = (y_max - 2 * size) / 2.0;
         new_shape -> setPosition({x, y});
-        float speed = (float)(rand() % 50 + 1) / 100.0;
+        float speed = (float)(rand() % 50 + 1) / 1000.0;
         float heading = (float)(rand() % 360);
         shape.push_back(std::move(new_shape)); 
         velocity.push_back(shape_struct(heading, speed));
@@ -78,6 +78,8 @@ Shapes::update()
         sf::Vector2f pos = shape[i]->getPosition();
         
         float s = velocity[i].speed;
+        int dir = rand() % 2;
+        s += (dir == 1 ? (float(rand() % 100) / 100.0) : (float(rand() % 100) / -100.0));
         float h = velocity[i].heading;
         
         pos.x += (s * std::cosf(h * kTwoPi / k360Degrees));
@@ -108,6 +110,22 @@ Shapes::update()
         else
             r += 0.1_deg;
         shape[i] -> setRotation(r);
+        sf::Color new_color = shape[i] -> getFillColor();
+        switch(i % 3)
+        {
+            case 0:
+                new_color.r++;
+                break;
+
+            case 1:
+                new_color.g++;
+                break;
+
+            case 2:
+                new_color.b++;
+                break;
+        }
+        shape[i] -> setFillColor(new_color);
     }
     return 0;
 }
