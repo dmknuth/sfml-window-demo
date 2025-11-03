@@ -82,25 +82,25 @@ Shapes::update()
         s += (dir == 1 ? (float(rand() % 100) / 100.0) : (float(rand() % 100) / -100.0));
         float h = velocity[i].heading;
         
-        pos.x += (s * std::cosf(h * kTwoPi / k360Degrees));
-        pos.y += (s * std::sinf(h * kTwoPi / k360Degrees));
+        pos.x += (s * cos(h * kTwoPi / k360Degrees));
+        pos.y += (s * sin(h * kTwoPi / k360Degrees));
         
         if((pos.x < d) || ((pos.x + d) > x_max))
         {
             velocity[i].heading = k360Degrees / 2.0 - h;
             if(pos.x < d)
-                pos.x = d + s * std::cosf(velocity[i].heading * kTwoPi / k360Degrees);
+                pos.x = d + s * cos(velocity[i].heading * kTwoPi / k360Degrees);
             else
-                pos.x = x_max - d - s * std::cosf(velocity[i].heading * kTwoPi / k360Degrees);
+                pos.x = x_max - d - s * cos(velocity[i].heading * kTwoPi / k360Degrees);
         }
         
         if((pos.y < d) || ((pos.y + d) > y_max))
         {
             velocity[i].heading = k360Degrees - h;
             if(pos.y < d)
-                pos.y = d + s * std::sinf(velocity[i].heading * kTwoPi / k360Degrees);
+                pos.y = d + s * sin(velocity[i].heading * kTwoPi / k360Degrees);
             else
-                pos.y = y_max - d - s * std::sinf(velocity[i].heading * kTwoPi / k360Degrees);
+                pos.y = y_max - d - s * sin(velocity[i].heading * kTwoPi / k360Degrees);
         }
         shape[i] -> setPosition(pos);
         sf::Angle r = shape[i] -> getRotation();
