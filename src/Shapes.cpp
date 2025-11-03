@@ -18,14 +18,17 @@ Shapes::generate()
 //        sf::RectangleShape* new_shape = new sf::RectangleShape;
         auto new_shape = std::make_unique<sf::RectangleShape>();
 //        new_shape -> setRadius(size);
+//        size += ((rand() % 2) == 0 ? (float(rand() % 100) / 100.0) : (float(rand() % 100) / -100.0));
         new_shape -> setSize({(float)size, (float)size});
         new_shape -> setOrigin({size * 0.5f, size * 0.5f});
         new_shape -> setFillColor(random_color());
         float x = (x_max - 2 * size) / 2.0;
         float y = (y_max - 2 * size) / 2.0;
         new_shape -> setPosition({x, y});
-        float speed = (float)(rand() % 50 + 1) / 1000.0;
+        float speed = (float)(rand() % 50000 + 100) / 100000.0;
+//        std::cout << "speed " << speed << std::endl;
         float heading = (float)(rand() % 360);
+//        std::cout << "heading " << heading << std::endl;
         shape.push_back(std::move(new_shape)); 
         velocity.push_back(shape_struct(heading, speed));
     }
@@ -66,6 +69,7 @@ Shapes::get_item(int i)
 }
 
 //----------------------------------------------------------------------------------------
+/*
 int
 Shapes::update()
 {
@@ -77,9 +81,13 @@ Shapes::update()
     {
         sf::Vector2f pos = shape[i]->getPosition();
         
+//        velocity[i].speed *= 0.99999;
+        velocity[i].speed *= 1.00001;
+        if(velocity[i].speed < 0.0)
+            velocity[i].speed = 0.0;
         float s = velocity[i].speed;
         int dir = rand() % 2;
-        s += (dir == 1 ? (float(rand() % 100) / 100.0) : (float(rand() % 100) / -100.0));
+//        s += (dir == 1 ? (float(rand() % 100) / 100.0) : (float(rand() % 100) / -100.0));
         float h = velocity[i].heading;
         
         pos.x += (s * cos(h * kTwoPi / k360Degrees));
@@ -106,9 +114,15 @@ Shapes::update()
         sf::Angle r = shape[i] -> getRotation();
         using namespace sf::Literals;
         if(h > 180.0)
-            r -= 0.1_deg;
+        {
+            r -= 1.0_deg;
+//            std::cout << "-";
+        }
         else
-            r += 0.1_deg;
+        {
+            r += 1.0_deg;
+//            std::cout << "+";
+        }
         shape[i] -> setRotation(r);
         sf::Color new_color = shape[i] -> getFillColor();
         switch(i % 3)
@@ -125,10 +139,11 @@ Shapes::update()
                 new_color.b++;
                 break;
         }
-        shape[i] -> setFillColor(new_color);
+//        shape[i] -> setFillColor(new_color);
     }
     return 0;
 }
+*/
 
 //----------------------------------------------------------------------------------------
 sf::Color
@@ -175,4 +190,82 @@ Shapes::random_color()
     color.b = rand() % 256;
     color.a = rand() % 128 + 128;
     return(color);
+}
+
+//----------------------------------------------------------------------------------------
+int Shapes::update()
+{
+    constexpr float kTwoPiOver360 = 2.0f * std::numbers::pi / 360.0f; // precomputed constant
+    const float d = size * 0.5f;
+
+    // Precompute reciprocal bounds once
+    const float xBound = x_max - d;
+    const float yBound = y_max - d;
+
+    for (int i = 0; i < count; ++i)
+    {
+        auto shp = shape[i];                  // cache pointer
+        auto& vel = velocity[i];               // reference for readability
+        sf::Vector2f pos = shp->getPosition(); // local copy
+
+        // Adjust speed (slightly faster growth)
+        vel.speed *= 1.00001f;
+        if (vel.speed < 0.0f)
+            vel.speed = 0.0f;
+
+        const float s = vel.speed;
+        const float h = vel.heading;
+        const float angleRad = h * kTwoPiOver360;
+
+        // Compute displacement once
+        const float dx = s * std::cosf(angleRad);
+        const float dy = s * std::sinf(angleRad);
+
+        pos.x += dx;
+        pos.y += dy;
+
+        // Bounce horizontally
+        if (pos.x < d || pos.x + d > x_max)
+        {
+            vel.heading = 180.0f - h;
+            const float newAngleRad = vel.heading * kTwoPiOver360;
+            pos.x = (pos.x < d)
+                ? d + s * std::cosf(newAngleRad)
+                : xBound - s * std::cosf(newAngleRad);
+        }
+
+        // Bounce vertically
+        if (pos.y < d || pos.y + d > y_max)
+        {
+            vel.heading = 360.0f - h;
+            const float newAngleRad = vel.heading * kTwoPiOver360;
+            pos.y = (pos.y < d)
+                ? d + s * std::sinf(newAngleRad)
+                : yBound - s * std::sinf(newAngleRad);
+        }
+
+        shp->setPosition(pos);
+
+        // Rotation update (same logic)
+        sf::Angle r = shp->getRotation();
+        using namespace sf::Literals;
+        r += (h > 180.0f ? -1.0_deg : 1.0_deg);
+        shp->setRotation(r);
+
+        // Color update (unchanged behavior)
+        if (i % 3 == 0)
+            shp->setFillColor({std::uint8_t(std::min(255, shp->getFillColor().r + 1)),
+                               shp->getFillColor().g,
+                               shp->getFillColor().b});
+        else if (i % 3 == 1)
+            shp->setFillColor({shp->getFillColor().r,
+                               std::uint8_t(std::min(255, shp->getFillColor().g + 1)),
+                               shp->getFillColor().b});
+        else
+            shp->setFillColor({shp->getFillColor().r,
+                               shp->getFillColor().g,
+                               std::uint8_t(std::min(255, shp->getFillColor().b + 1))});
+    }
+
+    return 0;
 }

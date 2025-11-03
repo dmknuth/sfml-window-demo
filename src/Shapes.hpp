@@ -4,6 +4,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <vector>
+#include <iostream>
 
 struct shape_struct
 {
@@ -23,7 +24,8 @@ class Shapes
         int             get_count() { return count; }
         
     private:
-        std::vector<std::unique_ptr<sf::RectangleShape>> shape;
+//        std::vector<std::unique_ptr<sf::RectangleShape>> shape;
+        std::vector<std::shared_ptr<sf::RectangleShape>> shape;
         std::vector<shape_struct>       velocity;
 
         sf::RenderWindow                _window;
