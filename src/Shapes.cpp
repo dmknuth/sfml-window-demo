@@ -218,8 +218,8 @@ int Shapes::update()
         const float angleRad = h * kTwoPiOver360;
 
         // Compute displacement once
-        const float dx = s * std::cosf(angleRad);
-        const float dy = s * std::sinf(angleRad);
+        const float dx = s * cos(angleRad);
+        const float dy = s * sin(angleRad);
 
         pos.x += dx;
         pos.y += dy;
@@ -230,8 +230,8 @@ int Shapes::update()
             vel.heading = 180.0f - h;
             const float newAngleRad = vel.heading * kTwoPiOver360;
             pos.x = (pos.x < d)
-                ? d + s * std::cosf(newAngleRad)
-                : xBound - s * std::cosf(newAngleRad);
+                ? d + s * cos(newAngleRad)
+                : xBound - s * cos(newAngleRad);
         }
 
         // Bounce vertically
@@ -240,8 +240,8 @@ int Shapes::update()
             vel.heading = 360.0f - h;
             const float newAngleRad = vel.heading * kTwoPiOver360;
             pos.y = (pos.y < d)
-                ? d + s * std::sinf(newAngleRad)
-                : yBound - s * std::sinf(newAngleRad);
+                ? d + s * sin(newAngleRad)
+                : yBound - s * sin(newAngleRad);
         }
 
         shp->setPosition(pos);
