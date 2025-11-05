@@ -21,7 +21,6 @@ Shapes::generate()
 //        size += ((rand() % 2) == 0 ? (float(rand() % 100) / 100.0) : (float(rand() % 100) / -100.0));
         new_shape -> setSize({(float)size, (float)size});
         new_shape -> setOrigin({size * 0.5f, size * 0.5f});
-        new_shape -> setFillColor(random_color());
         float x = (x_max - 2 * size) / 2.0;
         float y = (y_max - 2 * size) / 2.0;
         new_shape -> setPosition({x, y});
@@ -29,6 +28,13 @@ Shapes::generate()
 //        std::cout << "speed " << speed << std::endl;
         float heading = (float)(rand() % 360);
 //        std::cout << "heading " << heading << std::endl;
+        sf::Color color;
+        if(heading > 180.0)
+            color = sf::Color::Green;
+        else
+            color = sf::Color::Red;
+  //      new_shape -> setFillColor(color);
+        new_shape -> setFillColor(random_color());
         shape.push_back(std::move(new_shape)); 
         velocity.push_back(shape_struct(heading, speed));
     }
@@ -252,6 +258,7 @@ int Shapes::update()
         r += (h > 180.0f ? -1.0_deg : 1.0_deg);
         shp->setRotation(r);
 
+        /*
         // Color update (unchanged behavior)
         if (i % 3 == 0)
             shp->setFillColor({std::uint8_t(std::min(255, shp->getFillColor().r + 1)),
@@ -265,6 +272,7 @@ int Shapes::update()
             shp->setFillColor({shp->getFillColor().r,
                                shp->getFillColor().g,
                                std::uint8_t(std::min(255, shp->getFillColor().b + 1))});
+        */
     }
 
     return 0;

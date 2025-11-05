@@ -20,6 +20,7 @@ add_executable(
     src/Application.cpp
     src/Window.cpp
     src/Shapes.cpp
+    src/FpsCounter.cpp
 )
 target_compile_features(WindowDemo PRIVATE cxx_std_20)
 target_link_libraries(WindowDemo PRIVATE SFML::Graphics)

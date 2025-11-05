@@ -7,6 +7,8 @@
 #include <chrono>
 #include <ctime>
 #include <unistd.h>
+#include "FpsCounter.hpp"
+
 
 const   bool    k_quit = false;
 
@@ -66,7 +68,7 @@ Window::create()
 {
     _window = sf::RenderWindow(sf::VideoMode({width, height}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
     _window.setPosition(position);
-    if (!font.openFromFile("./resources/Monaco.ttf"))
+    if (!font.openFromFile("/snap/gnome-42-2204/202/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"))
         std::cerr << "Could not load font." << std::endl;
     font.setSmooth(true);
     create_grid();
@@ -102,7 +104,7 @@ Window::draw_grid()
 
 //----------------------------------------------------------------------------------------
 void
-Window::display_instrumentation()
+Window::display_instrumentation(double fps)
 {
     const float k_leading = 12.0;
     const int k_font_size = 14;
@@ -132,28 +134,17 @@ Window::display_instrumentation()
     }
     // Frame Rate
     {
-        const int k_frame_max = 1000;
-        static double fps = (double)k_frame_max;
+        
         std::ostringstream frame_time;
-        static int frames = 0;
-        static std::chrono::time_point<std::chrono::system_clock> last_time;
-        auto current_time = std::chrono::system_clock::now();
-        std::chrono::duration<double> elapsed_seconds = current_time - last_time;
-        frames++;
-        frame_time << "FPS: " << fps;
-        if(frames >= k_frame_max)
-        {
-            fps = (double)k_frame_max / elapsed_seconds.count();
-            last_time = current_time;
-            frames = 0;
-        }
+      
+        frame_time << std::setprecision(3) << "FPS: " << fps;
         sf::Text framerate(font, frame_time.str(), k_font_size);
         framerate.setFillColor(sf::Color::Black);
         pos.y += k_leading;
         framerate.setPosition(pos);
         _window.draw(framerate);
     }
-    usleep(1);
+ //   usleep(1);
 }
 
 //----------------------------------------------------------------------------------------
@@ -176,6 +167,7 @@ Window::handle_keystrokes()
 int
 Window::process_events()
 {
+    FpsCounter fpsCounter;
     while (_window.isOpen())
     {
         if(handle_keystrokes() == k_quit)
@@ -193,7 +185,8 @@ Window::process_events()
             {
                 _window.draw(content->get_item(i));
             }
-            display_instrumentation();
+            double fps = fpsCounter.update();
+            display_instrumentation(fps);
             _window.display();
         }
     }

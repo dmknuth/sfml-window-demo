@@ -33,6 +33,6 @@ class Window
         std::vector<sf::VertexArray>    grid_lines;
         void                            update_content();
         void                            draw_grid();
-        void                            display_instrumentation();
+        void                            display_instrumentation(double);
 };
 #endif

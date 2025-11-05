@@ -82,7 +82,7 @@ Application::process_args
                 std::cout << "-a set the antialias amount.  The higher the number, the fuzzier the edges of the objects. The default is " << k_anti_alias << "." << std::endl;
                 std::cout << "-c set the number of objects to create. The default is " << k_count << "." << std::endl;
                 std::cout << "-g to display a grid. The default is no grid." << std::endl;
-                std::cout << "-r set the size of the objects. The default is " << k_size << "." << std::endl;
+                std::cout << "-s set the size of the objects. The default is " << k_size << "." << std::endl;
                 std::cout << "-v display version of this application." << std::endl;
                 std::cout << "-w set the width of the window to create. The default is " << k_width << "." << std::endl;
                 std::cout << "-h set the height of the window to create. The default is " << k_height << "." << std::endl;
@@ -147,6 +147,7 @@ Application::run()
     assert(window != nullptr);
 
     window -> configure(&arg_list) -> create();
+  
     std::unique_ptr<Shapes> shape_vector = std::move(create_shapes(&arg_list));
     assert(shape_vector != nullptr);
 
