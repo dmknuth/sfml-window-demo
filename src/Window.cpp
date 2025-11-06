@@ -68,6 +68,9 @@ Window::create()
 {
     _window = sf::RenderWindow(sf::VideoMode({width, height}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
     _window.setPosition(position);
+    //_window.setVerticalSyncEnabled(false);     // Disable VSync (redundant but safe)
+    //_window.setFramerateLimit(0);              // Unlimited FPS
+
     if (!font.openFromFile("/snap/gnome-42-2204/202/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"))
         std::cerr << "Could not load font." << std::endl;
     font.setSmooth(true);

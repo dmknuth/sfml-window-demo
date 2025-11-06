@@ -33,7 +33,7 @@ Shapes::generate()
             color = sf::Color::Green;
         else
             color = sf::Color::Red;
-  //      new_shape -> setFillColor(color);
+ //       new_shape -> setFillColor(color);
         new_shape -> setFillColor(random_color());
         shape.push_back(std::move(new_shape)); 
         velocity.push_back(shape_struct(heading, speed));
