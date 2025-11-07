@@ -10,7 +10,7 @@
 #include "FpsCounter.hpp"
 
 
-const   bool    k_quit = false;
+const   bool    k_quit = -1;
 
 //----------------------------------------------------------------------------------------
 Window*
@@ -107,10 +107,16 @@ Window::draw_grid()
 
 //----------------------------------------------------------------------------------------
 void
-Window::display_instrumentation(double fps)
+Window::display_instrumentation
+(
+    double fps,
+    int    keycode
+)
 {
     const float k_leading = 12.0;
     const int k_font_size = 14;
+    static int new_keycode = 0;
+    
     sf::Vector2f    pos({10.0f, 10.0f});
 
     // Count
@@ -147,23 +153,40 @@ Window::display_instrumentation(double fps)
         framerate.setPosition(pos);
         _window.draw(framerate);
     }
+    // Key Stroke
+    {
+        if(keycode)
+        {
+            new_keycode = keycode;
+        }
+        std::ostringstream i_keystring;
+        i_keystring << "Key Press: " << new_keycode;
+        sf::Text keystring(font, i_keystring.str(), k_font_size);
+        keystring.setFillColor(sf::Color::Black);
+        pos.y += k_leading;
+        keystring.setPosition(pos);
+        _window.draw(keystring);
+    }
  //   usleep(1);
 }
 
 //----------------------------------------------------------------------------------------
-bool
+int
 Window::handle_keystrokes()
 {
+    int keycode = 0;
     while (const std::optional event = _window.pollEvent())
     {
          if (event->is<sf::Event::Closed>() ||
             (event->is<sf::Event::KeyPressed>() &&
             (event->getIf<sf::Event::KeyPressed>()->code) == sf::Keyboard::Key::Escape))
         {
-            return false;
+            return k_quit;
         }
+        if(event->is<sf::Event::KeyPressed>())
+            keycode = int(event->getIf<sf::Event::KeyPressed>()->code);
     }
-    return true;
+    return keycode;
 }
 
 //----------------------------------------------------------------------------------------
@@ -173,7 +196,8 @@ Window::process_events()
     FpsCounter fpsCounter;
     while (_window.isOpen())
     {
-        if(handle_keystrokes() == k_quit)
+        int keycode = handle_keystrokes();
+        if(keycode == k_quit)
         {
             _window.close();
             return -1;
@@ -189,7 +213,7 @@ Window::process_events()
                 _window.draw(content->get_item(i));
             }
             double fps = fpsCounter.update();
-            display_instrumentation(fps);
+            display_instrumentation(fps, keycode);
             _window.display();
         }
     }

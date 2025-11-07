@@ -5,6 +5,7 @@
 #include "Application.hpp"
 #include "Shapes.hpp"
 #include <vector>
+#include <memory>
 
 class Window
 {
@@ -14,7 +15,7 @@ class Window
 
         Window*     configure(const struct arg_struct*);
         Window*     create();
-        bool        handle_keystrokes();
+        int         handle_keystrokes();
         void        create_grid();
         int         process_events();
         void        add_content(std::unique_ptr<Shapes>);
@@ -33,6 +34,6 @@ class Window
         std::vector<sf::VertexArray>    grid_lines;
         void                            update_content();
         void                            draw_grid();
-        void                            display_instrumentation(double);
+        void                            display_instrumentation(double, int);
 };
 #endif
