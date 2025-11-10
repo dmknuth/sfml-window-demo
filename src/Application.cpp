@@ -1,5 +1,7 @@
 #include "Application.hpp"
 #include "Window.hpp"
+#include "Broadcaster.hpp"
+#include "Receiver.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <unistd.h>
@@ -146,8 +148,14 @@ Application::run()
     auto window = std::make_unique<Window>();
     assert(window != nullptr);
 
-    window -> configure(&arg_list) -> create();
-  
+    auto broadcaster = std::make_unique<Broadcaster>(5555);
+    assert(broadcaster != nullptr);
+
+//    auto receiver = std::make_unique<Receiver>();
+//    assert(receiver != nullptr);
+
+    window -> configure(&arg_list) -> create() -> add_broadcaster(std::move(broadcaster)) -> add_receiver(std::move(receiver));
+    
     std::unique_ptr<Shapes> shape_vector = std::move(create_shapes(&arg_list));
     assert(shape_vector != nullptr);
 

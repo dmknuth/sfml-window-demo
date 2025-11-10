@@ -63,18 +63,63 @@ Window::create_grid()
 }
 
 //----------------------------------------------------------------------------------------
+void
+Window::load_fonts()
+{
+    // Font loading
+    bool fontLoaded = false;
+    for (const auto& path : {
+         "/Users/david/Library/Mobile Documents/com~apple~CloudDocs/Software Development/ui/zmq-sfml-demo/resources/Monaco.ttf",
+         "./resources/Monaco.ttf"
+         }) {
+        if (font.openFromFile(path)) {
+            font.setSmooth(true);
+            fontLoaded = true;
+            break;
+        }
+    }
+
+    sf::Text statusText(font);
+    if (fontLoaded) {
+        std::string message("Game Arena");
+        statusText.setString(message.c_str());
+        statusText.setCharacterSize(12);
+        statusText.setFillColor(sf::Color::Black);
+        statusText.setPosition({10.f, 10.f});
+        _window.draw(statusText);
+    } else {
+        statusText.setString("No font found");
+        statusText.setFillColor(sf::Color::Red);
+    }
+}
+
+//----------------------------------------------------------------------------------------
 Window*
 Window::create()
 {
-    _window = sf::RenderWindow(sf::VideoMode({width, height}), "Window Demo", sf::Style::Close, sf::State::Windowed, settings);
+    const int kMaxRefreshRate(120);
+    _window = sf::RenderWindow(sf::VideoMode({width, height}), "Game Demo");
+    _window.setFramerateLimit(kMaxRefreshRate);
     _window.setPosition(position);
-    //_window.setVerticalSyncEnabled(false);     // Disable VSync (redundant but safe)
-    //_window.setFramerateLimit(0);              // Unlimited FPS
 
-    if (!font.openFromFile("/snap/gnome-42-2204/202/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"))
-        std::cerr << "Could not load font." << std::endl;
-    font.setSmooth(true);
+    load_fonts();
     create_grid();
+    return this;
+}
+
+//----------------------------------------------------------------------------------------
+Window*
+Window::add_broadcaster(std::unique_ptr<Broadcaster> inBroadcaster)
+{
+    broadcaster = std::move(inBroadcaster);
+    return this;
+}
+
+//----------------------------------------------------------------------------------------
+Window*
+Window::add_receiver(std::unique_ptr<Receiver> inReceiver)
+{
+    receiver = std::move(inReceiver);
     return this;
 }
 

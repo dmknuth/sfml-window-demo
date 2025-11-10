@@ -4,6 +4,8 @@
 #include <SFML/Graphics/Font.hpp>
 #include "Application.hpp"
 #include "Shapes.hpp"
+#include "Broadcaster.hpp"
+#include "Receiver.hpp"
 #include <vector>
 #include <memory>
 
@@ -15,8 +17,9 @@ class Window
 
         Window*     configure(const struct arg_struct*);
         Window*     create();
-        int         handle_keystrokes();
-        void        create_grid();
+        Window*     add_broadcaster(std::unique_ptr<Broadcaster>);
+        Window*     add_receiver(std::unique_ptr<Receiver>);
+        int        handle_keystrokes();
         int         process_events();
         void        add_content(std::unique_ptr<Shapes>);
         
@@ -27,12 +30,16 @@ class Window
         sf::Vector2i                    position;
         sf::ContextSettings             settings;
         sf::RenderWindow                _window;
+        std::unique_ptr<Broadcaster>    broadcaster;
+        std::unique_ptr<Receiver>       receiver;
         std::unique_ptr<Shapes>         content;
         u_int16_t                       count;
         u_int16_t                       size;
         sf::Font                        font;
         std::vector<sf::VertexArray>    grid_lines;
         void                            update_content();
+        void                            load_fonts();
+        void                            create_grid();
         void                            draw_grid();
         void                            display_instrumentation(double, int);
 };
