@@ -45,5 +45,9 @@ Broadcaster::send(std::string not_used)
         std::memcpy(zmq_msg.data(), payload.data(), payload.size());
         publisher -> send(zmq_msg, zmq::send_flags::none);
     }
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> d2c4001 (Make Broadcaster functional)

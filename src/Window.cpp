@@ -66,6 +66,8 @@ Window::create_grid()
 void
 Window::load_fonts()
 {
+    std::cout << "load_fonts()" << std::endl;
+    
     // Font loading
     bool fontLoaded = false;
     for (const auto& path : {
@@ -97,6 +99,7 @@ Window::load_fonts()
 Window*
 Window::create()
 {
+    std::cout << "create()" << std::endl;
     const int kMaxRefreshRate(120);
     _window = sf::RenderWindow(sf::VideoMode({width, height}), "Game Demo");
     _window.setFramerateLimit(kMaxRefreshRate);
@@ -111,6 +114,7 @@ Window::create()
 Window*
 Window::add_broadcaster(std::unique_ptr<Broadcaster> inBroadcaster)
 {
+    std::cout << "add_broadcaster()" << std::endl;
     broadcaster = std::move(inBroadcaster);
     return this;
 }
@@ -238,6 +242,7 @@ Window::handle_keystrokes()
 int
 Window::process_events()
 {
+    std::cout << "process_events()" << std::endl;
     FpsCounter fpsCounter;
     while (_window.isOpen())
     {

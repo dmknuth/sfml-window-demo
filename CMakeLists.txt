@@ -6,12 +6,16 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
-FetchContent_Declare(SFML
+
+# SFML
+FetchContent_Declare(
+    SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
     GIT_TAG 3.0.1
     GIT_SHALLOW ON
     EXCLUDE_FROM_ALL
-    SYSTEM)
+    SYSTEM
+)
 FetchContent_MakeAvailable(SFML)
 
 # ------------------- nlohmann/json (header-only) -------------------
@@ -29,8 +33,7 @@ FetchContent_MakeAvailable(json)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(ZMQ REQUIRED libzmq)
 
-add_executable(
-    GameDemo
+add_executable(GameDemo
     src/main.cpp
     src/Application.cpp
     src/Window.cpp
