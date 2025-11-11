@@ -153,12 +153,9 @@ Application::run()
 
 //    auto receiver = std::make_unique<Receiver>();
 //    assert(receiver != nullptr);
-<<<<<<< HEAD
-=======
 
     window -> configure(&arg_list) -> create() -> add_broadcaster(std::move(broadcaster));
     std::cout << "run()" << std::endl;
->>>>>>> d2c4001 (Make Broadcaster functional)
 
     std::unique_ptr<Shapes> shape_vector = std::move(create_shapes(&arg_list));
     assert(shape_vector != nullptr);
