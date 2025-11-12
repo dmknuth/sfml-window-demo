@@ -15,7 +15,7 @@ class Window
 
         Window*     configure(const struct arg_struct*);
         Window*     create();
-        int         handle_keystrokes();
+        bool         handle_keystrokes(int&);
         int         process_events();
         void        add_content(std::unique_ptr<Shapes>);
         

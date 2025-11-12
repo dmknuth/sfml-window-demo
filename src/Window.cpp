@@ -10,7 +10,7 @@
 #include "FpsCounter.hpp"
 
 
-const   bool    k_quit = -1;
+const   int    k_quit = -1;
 
 //----------------------------------------------------------------------------------------
 Window*
@@ -188,7 +188,7 @@ Window::display_instrumentation
     }
     // Key Stroke
     {
-        if(keycode)
+        if(keycode != -1)
         {
             new_keycode = keycode;
         }
@@ -200,26 +200,24 @@ Window::display_instrumentation
         keystring.setPosition(pos);
         _window.draw(keystring);
     }
- //   usleep(1);
 }
 
 //----------------------------------------------------------------------------------------
-int
-Window::handle_keystrokes()
+bool
+Window::handle_keystrokes(int& keycode)
 {
-    int keycode = 0;
     while (const std::optional event = _window.pollEvent())
     {
          if (event->is<sf::Event::Closed>() ||
             (event->is<sf::Event::KeyPressed>() &&
-            (event->getIf<sf::Event::KeyPressed>()->code) == sf::Keyboard::Key::Escape))
+            (event->getIf<sf::Event::KeyPressed>()->scancode) == sf::Keyboard::Scancode::Escape))
         {
-            return k_quit;
+            return false;
         }
         if(event->is<sf::Event::KeyPressed>())
-            keycode = int(event->getIf<sf::Event::KeyPressed>()->code);
+            keycode = int(event->getIf<sf::Event::KeyPressed>()->scancode);
     }
-    return keycode;
+    return true;
 }
 
 //----------------------------------------------------------------------------------------
@@ -230,8 +228,11 @@ Window::process_events()
     FpsCounter fpsCounter;
     while (_window.isOpen())
     {
-        int keycode = handle_keystrokes();
-        if(keycode == k_quit)
+        int keycode = -1;
+        bool run = handle_keystrokes(keycode);
+        if(keycode != -1)
+            std::cout << "keycode: " << keycode << std::endl;
+        if(run == false)
         {
             _window.close();
             return -1;
