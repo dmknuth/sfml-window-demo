@@ -71,8 +71,9 @@ Window::load_fonts()
     // Font loading
     bool fontLoaded = false;
     for (const auto& path : {
-         "/Users/david/Library/Mobile Documents/com~apple~CloudDocs/Software Development/ui/zmq-sfml-demo/resources/Monaco.ttf",
-         "./resources/Monaco.ttf"
+//         "/Users/david/Library/Mobile Documents/com~apple~CloudDocs/Software Development/ui/zmq-sfml-demo/resources/Monaco.ttf",
+//         "./resources/Monaco.ttf"
+         "/snap/gnome-42-2204/202/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
          }) {
         if (font.openFromFile(path)) {
             font.setSmooth(true);

@@ -17,9 +17,8 @@ class Window
 
         Window*     configure(const struct arg_struct*);
         Window*     create();
-        Window*     add_broadcaster(std::unique_ptr<Broadcaster>);
-        Window*     add_receiver(std::unique_ptr<Receiver>);
-        int        handle_keystrokes();
+        int         handle_keystrokes();
+        void        create_grid();
         int         process_events();
         void        add_content(std::unique_ptr<Shapes>);
         
