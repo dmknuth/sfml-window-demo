@@ -112,23 +112,6 @@ Window::create()
 }
 
 //----------------------------------------------------------------------------------------
-Window*
-Window::add_broadcaster(std::unique_ptr<Broadcaster> inBroadcaster)
-{
-    std::cout << "add_broadcaster()" << std::endl;
-    broadcaster = std::move(inBroadcaster);
-    return this;
-}
-
-//----------------------------------------------------------------------------------------
-Window*
-Window::add_receiver(std::unique_ptr<Receiver> inReceiver)
-{
-    receiver = std::move(inReceiver);
-    return this;
-}
-
-//----------------------------------------------------------------------------------------
 void
 Window::add_content(std::unique_ptr<Shapes> c)
 {   
