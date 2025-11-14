@@ -11,6 +11,7 @@ const   u_int16_t   k_pos_x = 50;
 const   u_int16_t   k_pos_y = 50;
 const   float       k_anti_alias = 1.1;
 const   u_int16_t   k_count = 10;
+const   u_int16_t   k_framerate = 120;
 const   u_int16_t   k_size = 20;
 const   bool        k_grid = false;
 
@@ -28,7 +29,7 @@ Application::process_args
 {
     for(;;)
     {
-        switch(getopt(argc, argv, "a:c:gh:r:s:vw:x:y:"))
+        switch(getopt(argc, argv, "a:c:f:gh:r:s:vw:x:y:"))
         {
             case 'a':
               arg_list -> anti_alias = std::strtof(optarg, 0);
@@ -38,6 +39,11 @@ Application::process_args
             case 'c':
               arg_list -> count = std::atoi(optarg);
               std::cout << "count " << arg_list -> count << std::endl;
+              continue;
+        
+            case 'f':
+              arg_list -> framerate = std::atoi(optarg);
+              std::cout << "framerate " << arg_list -> framerate << std::endl;
               continue;
         
             case 'g':
@@ -81,6 +87,7 @@ Application::process_args
                 std::cout << "usage:" << std::endl;
                 std::cout << "-a set the antialias amount.  The higher the number, the fuzzier the edges of the objects. The default is " << k_anti_alias << "." << std::endl;
                 std::cout << "-c set the number of objects to create. The default is " << k_count << "." << std::endl;
+                std::cout << "-f set the maximum framerate. The default is " << k_framerate << ". Setting the value to 0 means no limitation." << std::endl;
                 std::cout << "-g to display a grid. The default is no grid." << std::endl;
                 std::cout << "-s set the size of the objects. The default is " << k_size << "." << std::endl;
                 std::cout << "-v display version of this application." << std::endl;
@@ -108,6 +115,7 @@ Application::init_arg_struct(struct arg_struct& arg_list)
     arg_list.height = k_height;
     arg_list.anti_alias = k_anti_alias;
     arg_list.count = k_count;
+    arg_list.framerate = k_framerate;
     arg_list.size = k_size;
     arg_list.pos_x = k_pos_x;
     arg_list.pos_y = k_pos_y;
@@ -147,7 +155,6 @@ Application::run()
     assert(window != nullptr);
 
     window -> configure(&arg_list) -> create();
-    std::cout << "run()" << std::endl;
 
     std::unique_ptr<Shapes> shape_vector = std::move(create_shapes(&arg_list));
     assert(shape_vector != nullptr);

@@ -10,6 +10,7 @@ struct arg_struct
     u_int16_t   pos_y;
     float       anti_alias;
     u_int16_t   count;
+    u_int16_t   framerate;
     u_int16_t   size;
     bool        grid;
 };

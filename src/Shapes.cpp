@@ -2,6 +2,7 @@
 #include "Shapes.hpp"
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Angle.hpp>
+#include <SFML/Config.hpp>
 #include <random>
 #include <iostream>
 #include <numbers>

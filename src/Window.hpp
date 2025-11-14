@@ -28,6 +28,7 @@ class Window
         sf::RenderWindow                _window;
         std::unique_ptr<Shapes>         content;
         u_int16_t                       count;
+        u_int16_t                       framerate;
         u_int16_t                       size;
         sf::Font                        font;
         std::vector<sf::VertexArray>    grid_lines;

@@ -3,6 +3,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Config.hpp>
 #include <iostream>
 #include <chrono>
 #include <ctime>
@@ -22,6 +23,7 @@ Window::configure
     width = args -> width;
     height = args -> height;
     settings.antiAliasingLevel = args -> anti_alias;
+    framerate = args -> framerate;
     count = args -> count;
     size = args -> size;
     position.x = args -> pos_x;
@@ -65,9 +67,7 @@ Window::create_grid()
 //----------------------------------------------------------------------------------------
 void
 Window::load_fonts()
-{
-    std::cout << "load_fonts()" << std::endl;
-    
+{    
     // Font loading
     bool fontLoaded = false;
     for (const auto& path : {
@@ -110,10 +110,9 @@ Window::load_fonts()
 Window*
 Window::create()
 {
-    std::cout << "create()" << std::endl;
-    const int kMaxRefreshRate(120);
     _window = sf::RenderWindow(sf::VideoMode({width, height}), "Game Demo");
- //   _window.setFramerateLimit(kMaxRefreshRate);
+    if(framerate)
+        _window.setFramerateLimit(framerate);
     _window.setPosition(position);
 
     load_fonts();
@@ -234,7 +233,6 @@ Window::handle_keystrokes(int& keycode)
 int
 Window::process_events()
 {
-    std::cout << "process_events()" << std::endl;
     FpsCounter fpsCounter;
     while (_window.isOpen())
     {
