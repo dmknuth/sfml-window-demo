@@ -24,7 +24,19 @@ Shapes::generate()
         float x = (x_max - 2 * size) / 2.0;
         float y = (y_max - 2 * size) / 2.0;
         new_shape -> setPosition({x, y});
+        #ifdef SFML_SYSTEM_WINDOWS
+        // Windows-specific code
+        #elif defined(SFML_SYSTEM_LINUX)
         float speed = (float)(rand() % 50000 + 100) / 100000.0;
+        #elif defined(SFML_SYSTEM_MACOS)
+        float speed = (float)(rand() % 50000 + 100) / 1000000.0;
+        #elif defined(SFML_SYSTEM_IOS)
+            // iOS-specific code
+        #elif defined(SFML_SYSTEM_ANDROID)
+            // Android-specific code
+        #elif defined(SFML_SYSTEM_FREEBSD)
+            // FreeBSD-specific code
+        #endif
 //        std::cout << "speed " << speed << std::endl;
         float heading = (float)(rand() % 360);
 //        std::cout << "heading " << heading << std::endl;
@@ -255,7 +267,19 @@ int Shapes::update()
         // Rotation update (same logic)
         sf::Angle r = shp->getRotation();
         using namespace sf::Literals;
+        #ifdef SFML_SYSTEM_WINDOWS
+        // Windows-specific code
+        #elif defined(SFML_SYSTEM_LINUX)
         r += (h > 180.0f ? -1.0_deg : 1.0_deg);
+        #elif defined(SFML_SYSTEM_MACOS)
+        r += (h > 180.0f ? -0.1_deg : 0.1_deg);
+        #elif defined(SFML_SYSTEM_IOS)
+            // iOS-specific code
+        #elif defined(SFML_SYSTEM_ANDROID)
+            // Android-specific code
+        #elif defined(SFML_SYSTEM_FREEBSD)
+            // FreeBSD-specific code
+        #endif
         shp->setRotation(r);
 
         /*

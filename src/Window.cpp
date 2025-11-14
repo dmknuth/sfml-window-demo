@@ -71,9 +71,19 @@ Window::load_fonts()
     // Font loading
     bool fontLoaded = false;
     for (const auto& path : {
-//         "/Users/david/Library/Mobile Documents/com~apple~CloudDocs/Software Development/ui/zmq-sfml-demo/resources/Monaco.ttf",
-//         "./resources/Monaco.ttf"
-         "/snap/gnome-42-2204/202/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+        #ifdef SFML_SYSTEM_WINDOWS
+        // Windows-specific code
+        #elif defined(SFML_SYSTEM_LINUX)
+        "/snap/gnome-42-2204/202/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+        #elif defined(SFML_SYSTEM_MACOS)
+        "/System/Library/Fonts/Monaco.ttf"
+        #elif defined(SFML_SYSTEM_IOS)
+            // iOS-specific code
+        #elif defined(SFML_SYSTEM_ANDROID)
+            // Android-specific code
+        #elif defined(SFML_SYSTEM_FREEBSD)
+            // FreeBSD-specific code
+        #endif
          }) {
         if (font.openFromFile(path)) {
             font.setSmooth(true);
@@ -103,7 +113,7 @@ Window::create()
     std::cout << "create()" << std::endl;
     const int kMaxRefreshRate(120);
     _window = sf::RenderWindow(sf::VideoMode({width, height}), "Game Demo");
-    _window.setFramerateLimit(kMaxRefreshRate);
+ //   _window.setFramerateLimit(kMaxRefreshRate);
     _window.setPosition(position);
 
     load_fonts();
@@ -179,7 +189,7 @@ Window::display_instrumentation
         
         std::ostringstream frame_time;
       
-        frame_time << std::setprecision(3) << "FPS: " << fps;
+        frame_time << std::setprecision(6) << "FPS: " << fps;
         sf::Text framerate(font, frame_time.str(), k_font_size);
         framerate.setFillColor(sf::Color::Black);
         pos.y += k_leading;
